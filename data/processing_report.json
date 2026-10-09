@@ -1,0 +1,118 @@
+{
+  "status": "PROCESSED_HDF5_NOT_INDEPENDENTLY_AUTHENTICATED",
+  "sensor": "Planet Tanager-1",
+  "product": "orthorectified surface reflectance",
+  "scene_id": "tanager_agriculture_new",
+  "computed_utc": "2026-10-09T11:22:40.737435+00:00",
+  "sample_location_note": "Do not join this scene to Egyptian Sentinel-2 unless footprints overlap and dates align.",
+  "hdf5_metadata": {
+    "input_file": "C:\\Users\\Lenovo\\Downloads\\AgriLens_Dust_Drought_v2\\data\\tanager_agriculture_new.h5",
+    "bytes": 1047878062,
+    "cube_shape_band_y_x": [
+      426,
+      752,
+      784
+    ],
+    "dtype": "float32",
+    "band_count": 426,
+    "wavelength_min_nm": 376.44000244140625,
+    "wavelength_max_nm": 2499.0,
+    "epsg_from_hdf5": "32721",
+    "sampling_method": "None; full-scene HDF5 metadata",
+    "wavelength_source": "HDF5 or matching STAC"
+  },
+  "quality": {
+    "cloud_flag_pixels": 35,
+    "cirrus_flag_pixels": 3,
+    "nodata_flag_pixels": 167011,
+    "valid_quality_mask_pixels": 422519,
+    "total_pixels": 589568,
+    "valid_index_pixels": 420874,
+    "valid_index_fraction": 0.7138684596178897
+  },
+  "spectral_processing": {
+    "wavelengths_total": 426,
+    "wavelengths_retained": 361,
+    "excluded_intervals_nm": [
+      [
+        0,
+        400
+      ],
+      [
+        1350,
+        1450
+      ],
+      [
+        1800,
+        1950
+      ],
+      [
+        2450,
+        2700
+      ]
+    ],
+    "quality_masks": [
+      "beta_cloud_mask",
+      "beta_cirrus_mask",
+      "nodata_pixels"
+    ],
+    "reflectance_limits": [
+      0,
+      1.2
+    ],
+    "spatial_sampling_stride_for_spectra_only": 5,
+    "sampled_pixel_counts": {
+      "low_ndvi": 180,
+      "high_ndvi": 180
+    },
+    "grouping": "30th/70th percentile of NDVI; not crop-health or stress labels",
+    "groups_cutoffs_ndvi": {
+      "low_max": 0.9040732085704803,
+      "high_min": 0.9509503304958343
+    },
+    "wavelength_selected_nm": {
+      "blue": 490.92999267578125,
+      "green": 560.8300170898438,
+      "red": 665.8699951171875,
+      "red_edge": 705.9199829101562,
+      "nir": 861.260009765625,
+      "swir": 1647.6600341796875
+    },
+    "red_edge_inflection_nm": {
+      "low_ndvi": 715.9400024414062,
+      "high_ndvi": 725.9600219726562
+    }
+  },
+  "index_summaries_valid_pixels": {
+    "ndvi": {
+      "mean": 0.8930829763412476,
+      "median": 0.9356644153594971,
+      "min": -0.44982343912124634,
+      "max": 0.9999920129776001
+    },
+    "ndre": {
+      "mean": 0.6722621321678162,
+      "median": 0.7107511162757874,
+      "min": -0.4690026044845581,
+      "max": 0.8650691509246826
+    },
+    "ndmi": {
+      "mean": 0.32851526141166687,
+      "median": 0.3810465931892395,
+      "min": -0.4354276657104492,
+      "max": 0.9173138737678528
+    }
+  },
+  "output_files": [
+    "spectral_signatures.csv",
+    "hyperspectral_analysis.png",
+    "index_maps.npz",
+    "processing_report.json"
+  ],
+  "limitations": [
+    "Separate example scene, not the Egypt AOI",
+    "No crop labels or field measurements",
+    "No demonstrated stress/disease discrimination or model-accuracy improvement",
+    "Narrow bands and band selection are not an equivalent Sentinel-2 sensor response convolution"
+  ]
+}

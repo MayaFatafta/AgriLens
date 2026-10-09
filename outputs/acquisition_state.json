@@ -1,0 +1,14 @@
+{
+  "as_of": "2026-10-09",
+  "location": "Nile Delta, Egypt",
+  "scene_id": "ENMAP01-____L2A-DT0000142619_20250720T092413Z_005_V010502_20250722T115947Z",
+  "catalog_coverage_reported_fraction": 1.0,
+  "catalog_response_source": "previously cached DLR STAC record supplied by user",
+  "catalog_live_recheck": "not completed: direct URL fetch unavailable in this environment",
+  "spectral_image_retrieved": false,
+  "metadata_xml_retrieved": false,
+  "quality_masks_retrieved": false,
+  "measured_pixel_quality_validated": false,
+  "download_blocker": "original remote asset inaccessible here; user authentication/approved EOWEB retrieval may be required",
+  "tests": "seven synthetic/offline tests pass; authentic EnMAP cube tests not run"
+}

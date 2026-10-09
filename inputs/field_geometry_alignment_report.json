@@ -1,0 +1,18 @@
+{
+  "dataset_rows": 707580,
+  "unique_grid_pixels": 22500,
+  "original_field_assigned_grid_pixels": 19579,
+  "tile_field_assigned_grid_pixels": 19579,
+  "mismatched_polygon_membership_grid_pixels": 0,
+  "ambiguous_multi_polygon_pixels": 0,
+  "field_1665168_unique_pixels": 15984,
+  "field_1665168_match_by_ftw_polygon": {
+    "tile_row_113314": 15984
+  },
+  "largest_tile_polygon_temp_id": "tile_row_113314",
+  "largest_tile_polygon_area_aoi_ha": 639.871634,
+  "largest_polygon_original_field_id_distribution": {
+    "1665168": 15984
+  },
+  "note": "No stable FTW field identifiers in tile. Crosswalk is inferred by pixel-center spatial coincidence, not direct ID equality."
+}

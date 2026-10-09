@@ -1,0 +1,19 @@
+{
+  "original_sentinel2_pixel_date_records": 707580,
+  "original_sentinel2_parquet_sha256": "dc8cc9a46700691828d685c254f19ded9e08f94b85decf2ba72b3b58cf63677b",
+  "real_screening_rows": 615,
+  "real_screening_fields": 20,
+  "real_screening_dates": 33,
+  "qa_gated_columns": 63,
+  "missing_original_s2_date_reconciliation": "pending (pixel dataset previously reported 34, field-level 33)",
+  "emit_fields_eligible": 20,
+  "emit_fields_usable": 14,
+  "emit_spectral_records": 3248,
+  "emit_wavelength_centers": 232,
+  "verified_dust_drought_damage_labels": 0,
+  "raw_emit_full_spectral_geotiff_included": false,
+  "enmap_partial_download_included": false,
+  "semisynthetic_benchmark_included": false,
+  "zip_integrity_test": "run on output",
+  "interpretation": "Exploratory anomaly screening and descriptive spectral analysis; do not claim dust-vs-drought causal classification."
+}

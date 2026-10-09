@@ -1,0 +1,11 @@
+.venv/
+.venv_clean/
+__pycache__/
+.pytest_cache/
+.ipynb_checkpoints/
+.env
+.env.*
+*.pem
+*.key
+*.part
+data/emit_egypt/original/*.nc

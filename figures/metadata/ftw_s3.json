@@ -1,0 +1,1638 @@
+{
+  "type": "Collection",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://schemas.portolan-sdi.org/portolan/v0.2.0/schema.json",
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
+    "https://stac-extensions.github.io/vector/v0.1.0/schema.json",
+    "https://stac-extensions.github.io/table/v1.2.0/schema.json",
+    "https://stac-extensions.github.io/scientific/v1.0.0/schema.json",
+    "https://schemas.portolan-sdi.org/incubating/partition/v1.0.0/schema.json",
+    "https://stac-extensions.github.io/file/v2.1.0/schema.json",
+    "https://stac-extensions.github.io/web-map-links/v1.3.0/schema.json"
+  ],
+  "portolan:styles": [
+    "styles/2025",
+    "styles/2024",
+    "styles/confidence-2025",
+    "styles/confidence-2024"
+  ],
+  "id": "vectors",
+  "title": "FTW Global \u2014 Field Boundary Predictions (GeoParquet)",
+  "description": "Global agricultural field-boundary polygons. Part of [Fields of the World](https://fieldsofthe.world) \u2014 agricultural field boundaries delineated by the PRUE model from Sentinel-2 imagery. ~3.2 billion field polygons across 195 countries, as cloud-native GeoParquet partitioned by country (admin, Hive layout), with per-country PMTiles for web visualization. A GeoParquet vector dataset is derived from the [prediction Zarr](https://data.source.coop/ftw/global-data/predictions/zarr/collection.json) by thresholding the softmax outputs for [non_field_background, field, field_boundaries] at 0.5 and polygonizing. Each field also carries a derived `confidence` (0\u2013100). Columns: id, geometry, bbox, metrics:area, metrics:perimeter, determination:datetime, determination:method, admin:country_code, admin:subdivision_code, confidence \u2014 see `table:columns` for definitions (including how `confidence` is derived).\n\n**How this was made.** Predictions come from the **PRUE** model ([Muhawenayo et al. 2026](https://arxiv.org/abs/2603.27101)) \u2014 a U-Net segmentation model with composite losses and targeted augmentations that, in a benchmark of 18 models, scored **76% IoU / 47% object-F1** on the Fields of the World benchmark, outperforming instance-segmentation and geospatial-foundation-model approaches. The **[Fields of the World benchmark](https://source.coop/kerner-lab/fields-of-the-world)** (get the data on Source Cooperative; Kerner et al. 2025, AAAI, [arXiv:2409.16252](https://arxiv.org/abs/2409.16252)) pairs multi-date multispectral **Sentinel-2** imagery with instance/semantic field masks across **70,462 samples in 24 countries on four continents**; models pre-trained on it generalize better to held-out countries. PRUE is run over global Sentinel-2 planting/harvest median composites, and the softmax outputs are thresholded and polygonized into these vectors. Downstream recipes (crop-type mapping, forest-loss attribution) are in the FTW field guide ([Corley et al. 2026](https://arxiv.org/abs/2602.08131)).",
+  "sci:citation": "Muhawenayo, G. et al. (2026). PRUE: A Practical Recipe for Field Boundary Segmentation at Scale. arXiv:2603.27101.",
+  "sci:publications": [
+    {
+      "doi": "10.48550/arXiv.2409.16252",
+      "citation": "Kerner, H. et al. (2025). Fields of the World: A Machine Learning Benchmark Dataset for Global Agricultural Field Boundary Segmentation. AAAI-2025. arXiv:2409.16252."
+    },
+    {
+      "doi": "10.48550/arXiv.2603.27101",
+      "citation": "Muhawenayo, G. et al. (2026). PRUE: A Practical Recipe for Field Boundary Segmentation at Scale. arXiv:2603.27101."
+    },
+    {
+      "doi": "10.48550/arXiv.2602.08131",
+      "citation": "Corley, I. et al. (2026). Fields of The World: A Field Guide for Extracting Agricultural Field Boundaries. arXiv:2602.08131."
+    }
+  ],
+  "license": "CC-BY-4.0",
+  "keywords": [
+    "agriculture",
+    "field boundaries",
+    "Fields of the World",
+    "FTW",
+    "global",
+    "PRUE",
+    "Sentinel-2",
+    "confidence"
+  ],
+  "providers": [
+    {
+      "name": "Microsoft AI for Good Research Lab",
+      "roles": [
+        "producer",
+        "processor"
+      ],
+      "url": "https://www.microsoft.com/en-us/research/group/ai-for-good-research-lab/"
+    },
+    {
+      "name": "Taylor Geospatial",
+      "roles": [
+        "producer",
+        "licensor",
+        "processor",
+        "host"
+      ],
+      "url": "https://taylorgeospatial.org/"
+    }
+  ],
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -180.0,
+          -60.0,
+          180.0,
+          84.0
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          "2024-01-01T00:00:00Z",
+          "2025-12-31T23:59:59Z"
+        ]
+      ]
+    }
+  },
+  "summaries": {
+    "proj:code": [
+      "EPSG:4326"
+    ],
+    "vector:geometry_types": [
+      "Polygon"
+    ]
+  },
+  "table:columns": [
+    {
+      "name": "id",
+      "type": "string",
+      "description": "An identifier for the field. Must be unique per collection. ([fiboa core](https://github.com/fiboa/specification/blob/main/core/README.md))"
+    },
+    {
+      "name": "geometry",
+      "type": "binary",
+      "description": "A geometry that reflects the footprint of the field, usually a Polygon. Default CRS is WGS84. ([fiboa core](https://github.com/fiboa/specification/blob/main/core/README.md))"
+    },
+    {
+      "name": "bbox",
+      "type": "struct",
+      "description": "The bounding box of the field. ([fiboa core](https://github.com/fiboa/specification/blob/main/core/README.md))"
+    },
+    {
+      "name": "metrics:area",
+      "type": "float",
+      "description": "Area of the field, in square meters (m\u00b2). Must be > 0. ([vecorel geometry-metrics](https://github.com/vecorel/geometry-metrics-extension))"
+    },
+    {
+      "name": "metrics:perimeter",
+      "type": "float",
+      "description": "Perimeter of the field, in meters (m). Must be > 0. ([vecorel geometry-metrics](https://github.com/vecorel/geometry-metrics-extension))"
+    },
+    {
+      "name": "determination:datetime",
+      "type": "timestamp",
+      "description": "The last timestamp at which the field did exist and was observed, in the UTC timezone. ([fiboa core](https://github.com/fiboa/specification/blob/main/core/README.md))"
+    },
+    {
+      "name": "determination:method",
+      "type": "string",
+      "description": "The boundary creation method (one of: manual, surveyed, driven, auto-operation, auto-imagery, unknown). ([fiboa core](https://github.com/fiboa/specification/blob/main/core/README.md))"
+    },
+    {
+      "name": "admin:country_code",
+      "type": "string",
+      "description": "ISO 3166-1 alpha-2 country code (aka admin0). Two-letter country code for the country that contains the field. ([vecorel administrative-division](https://github.com/vecorel/administrative-division-extension))"
+    },
+    {
+      "name": "admin:subdivision_code",
+      "type": "string",
+      "description": "ISO 3166-2 code for the principal subdivision (e.g. province or state, aka admin1) of a country that contains the field. Only the subdivision part of the code is stored. ([vecorel administrative-division](https://github.com/vecorel/administrative-division-extension))"
+    },
+    {
+      "name": "confidence",
+      "type": "float",
+      "description": "Derived; not part of the upstream model output. Modeled PRUE confidence on a 0\u2013100 scale, sampled at the field's point-on-surface from the 500 m confidence COG ([predictions/confidence](https://data.source.coop/ftw/global-data/predictions/confidence/collection.json)) and rescaled `raw / 0.578178 * 100`, clamped to 100 (0.578178 is treated as 100%, matching the FTW inference app; this centroid sample is the closest single value to the app's `confidence_mean`); **null where the field falls outside the modeled-confidence layer's coverage \u2014 i.e. no value there, not a low score** (the layer is sparse and conservative, fully covering mainly the 24 FTW-labelled training countries). Recommended reliability filter: `confidence >= 69` (raw 0.4). Reflects 500 m cell-level model reliability, not individual-polygon geometric accuracy. Generated by [add_confidence.py](https://github.com/fieldsoftheworld/ftw-data-catalog/blob/main/scripts/confidence/add_confidence.py) (+ process_partition.sh, run_rails.sh, make_pmtiles.py)."
+    }
+  ],
+  "partition:scheme": "hive",
+  "partition:keys": [
+    {
+      "name": "admin:country_code",
+      "type": "string"
+    }
+  ],
+  "links": [
+    {
+      "rel": "root",
+      "href": "../../catalog.json",
+      "type": "application/json",
+      "title": "Fields of the World \u2014 Global"
+    },
+    {
+      "rel": "parent",
+      "href": "../../catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "license",
+      "href": "https://creativecommons.org/licenses/by/4.0/",
+      "type": "text/html"
+    },
+    {
+      "rel": "derived_from",
+      "href": "https://data.source.coop/ftw/global-data/predictions/zarr/collection.json",
+      "type": "application/json",
+      "title": "FTW prediction probabilities (Zarr)"
+    },
+    {
+      "rel": "llms",
+      "href": "./llms.txt",
+      "type": "text/markdown",
+      "title": "Agent/LLM usage guide"
+    },
+    {
+      "rel": "related",
+      "href": "https://github.com/fiboa/specification/blob/main/core/README.md",
+      "type": "text/html",
+      "title": "fiboa core specification (id, geometry, bbox, determination:*)"
+    },
+    {
+      "rel": "related",
+      "href": "https://github.com/vecorel/geometry-metrics-extension",
+      "type": "text/html",
+      "title": "vecorel geometry-metrics extension (metrics:area, metrics:perimeter)"
+    },
+    {
+      "rel": "related",
+      "href": "https://github.com/vecorel/administrative-division-extension",
+      "type": "text/html",
+      "title": "vecorel administrative-division extension (admin:*)"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=AD/Andorra.json",
+      "type": "application/geo+json",
+      "title": "Andorra"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=AE/United_Arab_Emirates.json",
+      "type": "application/geo+json",
+      "title": "United_Arab_Emirates"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=AF/Afghanistan.json",
+      "type": "application/geo+json",
+      "title": "Afghanistan"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=AG/Antigua_and_Barbuda.json",
+      "type": "application/geo+json",
+      "title": "Antigua_and_Barbuda"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=AI/Anguilla.json",
+      "type": "application/geo+json",
+      "title": "Anguilla"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=AL/Albania.json",
+      "type": "application/geo+json",
+      "title": "Albania"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=AM/Armenia.json",
+      "type": "application/geo+json",
+      "title": "Armenia"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=AO/Angola.json",
+      "type": "application/geo+json",
+      "title": "Angola"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=AR/Argentina.json",
+      "type": "application/geo+json",
+      "title": "Argentina"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=AS/American_Samoa.json",
+      "type": "application/geo+json",
+      "title": "American_Samoa"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=AT/Austria.json",
+      "type": "application/geo+json",
+      "title": "Austria"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=AW/Aruba.json",
+      "type": "application/geo+json",
+      "title": "Aruba"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=AX/\u00c5land_Islands.json",
+      "type": "application/geo+json",
+      "title": "\u00c5land_Islands"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=AZ/Azerbaijan.json",
+      "type": "application/geo+json",
+      "title": "Azerbaijan"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=BA/Bosnia_and_Herzegovina.json",
+      "type": "application/geo+json",
+      "title": "Bosnia_and_Herzegovina"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=BB/Barbados.json",
+      "type": "application/geo+json",
+      "title": "Barbados"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=BD/Bangladesh.json",
+      "type": "application/geo+json",
+      "title": "Bangladesh"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=BE/Belgium.json",
+      "type": "application/geo+json",
+      "title": "Belgium"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=BF/Burkina_Faso.json",
+      "type": "application/geo+json",
+      "title": "Burkina_Faso"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=BG/Bulgaria.json",
+      "type": "application/geo+json",
+      "title": "Bulgaria"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=BH/Bahrain.json",
+      "type": "application/geo+json",
+      "title": "Bahrain"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=BI/Burundi.json",
+      "type": "application/geo+json",
+      "title": "Burundi"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=BJ/Benin.json",
+      "type": "application/geo+json",
+      "title": "Benin"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=BL/Saint_Barth\u00e9lemy.json",
+      "type": "application/geo+json",
+      "title": "Saint_Barth\u00e9lemy"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=BN/Brunei.json",
+      "type": "application/geo+json",
+      "title": "Brunei Darussalam"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=BO/Bolivia.json",
+      "type": "application/geo+json",
+      "title": "Bolivia, Plurinational State of"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=BQ/Bonaire_Sint_Eustatius_and_Saba.json",
+      "type": "application/geo+json",
+      "title": "Bonaire_Sint_Eustatius_and_Saba"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=BS/Bahamas.json",
+      "type": "application/geo+json",
+      "title": "Bahamas"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=BT/Bhutan.json",
+      "type": "application/geo+json",
+      "title": "Bhutan"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=BW/Botswana.json",
+      "type": "application/geo+json",
+      "title": "Botswana"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=BY/Belarus.json",
+      "type": "application/geo+json",
+      "title": "Belarus"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=BZ/Belize.json",
+      "type": "application/geo+json",
+      "title": "Belize"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=CA/Canada.json",
+      "type": "application/geo+json",
+      "title": "Canada"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=CD/DR_Congo.json",
+      "type": "application/geo+json",
+      "title": "DR_Congo"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=CF/Central_African_Republic.json",
+      "type": "application/geo+json",
+      "title": "Central_African_Republic"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=CG/Congo.json",
+      "type": "application/geo+json",
+      "title": "Congo"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=CH/Switzerland.json",
+      "type": "application/geo+json",
+      "title": "Switzerland"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=CI/Cote_dIvoire.json",
+      "type": "application/geo+json",
+      "title": "Cote_dIvoire"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=CL/Chile.json",
+      "type": "application/geo+json",
+      "title": "Chile"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=CM/Cameroon.json",
+      "type": "application/geo+json",
+      "title": "Cameroon"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=CO/Colombia.json",
+      "type": "application/geo+json",
+      "title": "Colombia"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=CR/Costa_Rica.json",
+      "type": "application/geo+json",
+      "title": "Costa_Rica"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=CU/Cuba.json",
+      "type": "application/geo+json",
+      "title": "Cuba"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=CV/Cape_Verde.json",
+      "type": "application/geo+json",
+      "title": "Cape_Verde"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=CW/Cura\u00e7ao.json",
+      "type": "application/geo+json",
+      "title": "Cura\u00e7ao"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=CY/Cyprus.json",
+      "type": "application/geo+json",
+      "title": "Cyprus"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=CZ/Czechia.json",
+      "type": "application/geo+json",
+      "title": "Czechia"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=DE/Germany.json",
+      "type": "application/geo+json",
+      "title": "Germany"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=DJ/Djibouti.json",
+      "type": "application/geo+json",
+      "title": "Djibouti"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=DK/Denmark.json",
+      "type": "application/geo+json",
+      "title": "Denmark"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=DM/Dominica.json",
+      "type": "application/geo+json",
+      "title": "Dominica"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=DO/Dominican_Republic.json",
+      "type": "application/geo+json",
+      "title": "Dominican_Republic"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=DZ/Algeria.json",
+      "type": "application/geo+json",
+      "title": "Algeria"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=EC/Ecuador.json",
+      "type": "application/geo+json",
+      "title": "Ecuador"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=EE/Estonia.json",
+      "type": "application/geo+json",
+      "title": "Estonia"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=EG/Egypt.json",
+      "type": "application/geo+json",
+      "title": "Egypt"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=ER/Eritrea.json",
+      "type": "application/geo+json",
+      "title": "Eritrea"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=ES/Spain.json",
+      "type": "application/geo+json",
+      "title": "Spain"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=FI/Finland.json",
+      "type": "application/geo+json",
+      "title": "Finland"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=FJ/Fiji.json",
+      "type": "application/geo+json",
+      "title": "Fiji"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=FM/Micronesia.json",
+      "type": "application/geo+json",
+      "title": "Micronesia, Federated States of"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=FR/France.json",
+      "type": "application/geo+json",
+      "title": "France"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=GA/Gabon.json",
+      "type": "application/geo+json",
+      "title": "Gabon"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=GB/United_Kingdom.json",
+      "type": "application/geo+json",
+      "title": "United_Kingdom"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=GD/Grenada.json",
+      "type": "application/geo+json",
+      "title": "Grenada"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=GE/Georgia.json",
+      "type": "application/geo+json",
+      "title": "Georgia"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=GF/French_Guiana.json",
+      "type": "application/geo+json",
+      "title": "French_Guiana"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=GG/Guernsey.json",
+      "type": "application/geo+json",
+      "title": "Guernsey"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=GH/Ghana.json",
+      "type": "application/geo+json",
+      "title": "Ghana"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=GL/Greenland.json",
+      "type": "application/geo+json",
+      "title": "Greenland"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=GM/Gambia.json",
+      "type": "application/geo+json",
+      "title": "Gambia"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=GN/Guinea.json",
+      "type": "application/geo+json",
+      "title": "Guinea"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=GP/Guadeloupe.json",
+      "type": "application/geo+json",
+      "title": "Guadeloupe"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=GQ/Equatorial_Guinea.json",
+      "type": "application/geo+json",
+      "title": "Equatorial_Guinea"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=GR/Greece.json",
+      "type": "application/geo+json",
+      "title": "Greece"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=GT/Guatemala.json",
+      "type": "application/geo+json",
+      "title": "Guatemala"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=GW/Guinea-Bissau.json",
+      "type": "application/geo+json",
+      "title": "Guinea-Bissau"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=GY/Guyana.json",
+      "type": "application/geo+json",
+      "title": "Guyana"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=HK/Hong_Kong.json",
+      "type": "application/geo+json",
+      "title": "Hong_Kong"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=HN/Honduras.json",
+      "type": "application/geo+json",
+      "title": "Honduras"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=HR/Croatia.json",
+      "type": "application/geo+json",
+      "title": "Croatia"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=HT/Haiti.json",
+      "type": "application/geo+json",
+      "title": "Haiti"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=HU/Hungary.json",
+      "type": "application/geo+json",
+      "title": "Hungary"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=ID/Indonesia.json",
+      "type": "application/geo+json",
+      "title": "Indonesia"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=IE/Ireland.json",
+      "type": "application/geo+json",
+      "title": "Ireland"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=IL/Israel.json",
+      "type": "application/geo+json",
+      "title": "Israel"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=IM/Isle_of_Man.json",
+      "type": "application/geo+json",
+      "title": "Isle_of_Man"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=IQ/Iraq.json",
+      "type": "application/geo+json",
+      "title": "Iraq"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=IR/Iran.json",
+      "type": "application/geo+json",
+      "title": "Iran, Islamic Republic of"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=IS/Iceland.json",
+      "type": "application/geo+json",
+      "title": "Iceland"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=IT/Italy.json",
+      "type": "application/geo+json",
+      "title": "Italy"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=JE/Jersey.json",
+      "type": "application/geo+json",
+      "title": "Jersey"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=JM/Jamaica.json",
+      "type": "application/geo+json",
+      "title": "Jamaica"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=JO/Jordan.json",
+      "type": "application/geo+json",
+      "title": "Jordan"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=JP/Japan.json",
+      "type": "application/geo+json",
+      "title": "Japan"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=KE/Kenya.json",
+      "type": "application/geo+json",
+      "title": "Kenya"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=KG/Kyrgyzstan.json",
+      "type": "application/geo+json",
+      "title": "Kyrgyzstan"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=KH/Cambodia.json",
+      "type": "application/geo+json",
+      "title": "Cambodia"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=KI/Kiribati.json",
+      "type": "application/geo+json",
+      "title": "Kiribati"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=KM/Comoros.json",
+      "type": "application/geo+json",
+      "title": "Comoros"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=KN/Saint_Kitts_and_Nevis.json",
+      "type": "application/geo+json",
+      "title": "Saint_Kitts_and_Nevis"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=KP/North_Korea.json",
+      "type": "application/geo+json",
+      "title": "North_Korea"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=KR/South_Korea.json",
+      "type": "application/geo+json",
+      "title": "South_Korea"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=KW/Kuwait.json",
+      "type": "application/geo+json",
+      "title": "Kuwait"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=KY/Cayman_Islands.json",
+      "type": "application/geo+json",
+      "title": "Cayman_Islands"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=KZ/Kazakhstan.json",
+      "type": "application/geo+json",
+      "title": "Kazakhstan"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=LA/Laos.json",
+      "type": "application/geo+json",
+      "title": "Lao People's Democratic Republic"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=LB/Lebanon.json",
+      "type": "application/geo+json",
+      "title": "Lebanon"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=LC/Saint_Lucia.json",
+      "type": "application/geo+json",
+      "title": "Saint_Lucia"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=LI/Liechtenstein.json",
+      "type": "application/geo+json",
+      "title": "Liechtenstein"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=LK/Sri_Lanka.json",
+      "type": "application/geo+json",
+      "title": "Sri_Lanka"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=LR/Liberia.json",
+      "type": "application/geo+json",
+      "title": "Liberia"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=LS/Lesotho.json",
+      "type": "application/geo+json",
+      "title": "Lesotho"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=LT/Lithuania.json",
+      "type": "application/geo+json",
+      "title": "Lithuania"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=LU/Luxembourg.json",
+      "type": "application/geo+json",
+      "title": "Luxembourg"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=LV/Latvia.json",
+      "type": "application/geo+json",
+      "title": "Latvia"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=LY/Libya.json",
+      "type": "application/geo+json",
+      "title": "Libya"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=MA/Morocco.json",
+      "type": "application/geo+json",
+      "title": "Morocco"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=MD/Moldova.json",
+      "type": "application/geo+json",
+      "title": "Moldova, Republic of"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=ME/Montenegro.json",
+      "type": "application/geo+json",
+      "title": "Montenegro"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=MF/Saint_Martin_French_part.json",
+      "type": "application/geo+json",
+      "title": "Saint_Martin_French_part"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=MG/Madagascar.json",
+      "type": "application/geo+json",
+      "title": "Madagascar"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=MH/Marshall_Islands.json",
+      "type": "application/geo+json",
+      "title": "Marshall_Islands"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=MK/North_Macedonia.json",
+      "type": "application/geo+json",
+      "title": "North_Macedonia"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=ML/Mali.json",
+      "type": "application/geo+json",
+      "title": "Mali"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=MM/Myanmar.json",
+      "type": "application/geo+json",
+      "title": "Myanmar"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=MN/Mongolia.json",
+      "type": "application/geo+json",
+      "title": "Mongolia"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=MQ/Martinique.json",
+      "type": "application/geo+json",
+      "title": "Martinique"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=MR/Mauritania.json",
+      "type": "application/geo+json",
+      "title": "Mauritania"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=MS/Montserrat.json",
+      "type": "application/geo+json",
+      "title": "Montserrat"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=MT/Malta.json",
+      "type": "application/geo+json",
+      "title": "Malta"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=MU/Mauritius.json",
+      "type": "application/geo+json",
+      "title": "Mauritius"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=MV/Maldives.json",
+      "type": "application/geo+json",
+      "title": "Maldives"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=MW/Malawi.json",
+      "type": "application/geo+json",
+      "title": "Malawi"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=MX/Mexico.json",
+      "type": "application/geo+json",
+      "title": "Mexico"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=MY/Malaysia.json",
+      "type": "application/geo+json",
+      "title": "Malaysia"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=MZ/Mozambique.json",
+      "type": "application/geo+json",
+      "title": "Mozambique"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=NA/Namibia.json",
+      "type": "application/geo+json",
+      "title": "Namibia"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=NE/Niger.json",
+      "type": "application/geo+json",
+      "title": "Niger"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=NI/Nicaragua.json",
+      "type": "application/geo+json",
+      "title": "Nicaragua"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=NL/Netherlands.json",
+      "type": "application/geo+json",
+      "title": "Netherlands"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=NO/Norway.json",
+      "type": "application/geo+json",
+      "title": "Norway"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=NP/Nepal.json",
+      "type": "application/geo+json",
+      "title": "Nepal"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=NR/Nauru.json",
+      "type": "application/geo+json",
+      "title": "Nauru"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=NZ/New_Zealand.json",
+      "type": "application/geo+json",
+      "title": "New_Zealand"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=OM/Oman.json",
+      "type": "application/geo+json",
+      "title": "Oman"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=PA/Panama.json",
+      "type": "application/geo+json",
+      "title": "Panama"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=PE/Peru.json",
+      "type": "application/geo+json",
+      "title": "Peru"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=PG/Papua_New_Guinea.json",
+      "type": "application/geo+json",
+      "title": "Papua_New_Guinea"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=PH/Philippines.json",
+      "type": "application/geo+json",
+      "title": "Philippines"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=PL/Poland.json",
+      "type": "application/geo+json",
+      "title": "Poland"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=PM/Saint_Pierre_and_Miquelon.json",
+      "type": "application/geo+json",
+      "title": "Saint_Pierre_and_Miquelon"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=PR/Puerto_Rico.json",
+      "type": "application/geo+json",
+      "title": "Puerto_Rico"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=PT/Portugal.json",
+      "type": "application/geo+json",
+      "title": "Portugal"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=PW/Palau.json",
+      "type": "application/geo+json",
+      "title": "Palau"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=PY/Paraguay.json",
+      "type": "application/geo+json",
+      "title": "Paraguay"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=QA/Qatar.json",
+      "type": "application/geo+json",
+      "title": "Qatar"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=RE/R\u00e9union.json",
+      "type": "application/geo+json",
+      "title": "R\u00e9union"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=RO/Romania.json",
+      "type": "application/geo+json",
+      "title": "Romania"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=RS/Serbia.json",
+      "type": "application/geo+json",
+      "title": "Serbia"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=RU/Russia.json",
+      "type": "application/geo+json",
+      "title": "Russian Federation"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=RW/Rwanda.json",
+      "type": "application/geo+json",
+      "title": "Rwanda"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=SA/Saudi_Arabia.json",
+      "type": "application/geo+json",
+      "title": "Saudi_Arabia"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=SB/Solomon_Islands.json",
+      "type": "application/geo+json",
+      "title": "Solomon_Islands"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=SC/Seychelles.json",
+      "type": "application/geo+json",
+      "title": "Seychelles"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=SD/Sudan.json",
+      "type": "application/geo+json",
+      "title": "Sudan"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=SE/Sweden.json",
+      "type": "application/geo+json",
+      "title": "Sweden"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=SG/Singapore.json",
+      "type": "application/geo+json",
+      "title": "Singapore"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=SI/Slovenia.json",
+      "type": "application/geo+json",
+      "title": "Slovenia"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=SJ/Svalbard_and_Jan_Mayen.json",
+      "type": "application/geo+json",
+      "title": "Svalbard_and_Jan_Mayen"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=SK/Slovakia.json",
+      "type": "application/geo+json",
+      "title": "Slovakia"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=SL/Sierra_Leone.json",
+      "type": "application/geo+json",
+      "title": "Sierra_Leone"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=SM/San_Marino.json",
+      "type": "application/geo+json",
+      "title": "San_Marino"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=SN/Senegal.json",
+      "type": "application/geo+json",
+      "title": "Senegal"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=SO/Somalia.json",
+      "type": "application/geo+json",
+      "title": "Somalia"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=SR/Suriname.json",
+      "type": "application/geo+json",
+      "title": "Suriname"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=SS/South_Sudan.json",
+      "type": "application/geo+json",
+      "title": "South_Sudan"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=ST/Sao_Tome_and_Principe.json",
+      "type": "application/geo+json",
+      "title": "Sao_Tome_and_Principe"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=SV/El_Salvador.json",
+      "type": "application/geo+json",
+      "title": "El_Salvador"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=SX/Sint_Maarten_Dutch_part.json",
+      "type": "application/geo+json",
+      "title": "Sint_Maarten_Dutch_part"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=SY/Syria.json",
+      "type": "application/geo+json",
+      "title": "Syrian Arab Republic"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=SZ/Eswatini.json",
+      "type": "application/geo+json",
+      "title": "Eswatini"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=TC/Turks_and_Caicos_Islands.json",
+      "type": "application/geo+json",
+      "title": "Turks_and_Caicos_Islands"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=TD/Chad.json",
+      "type": "application/geo+json",
+      "title": "Chad"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=TG/Togo.json",
+      "type": "application/geo+json",
+      "title": "Togo"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=TH/Thailand.json",
+      "type": "application/geo+json",
+      "title": "Thailand"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=TJ/Tajikistan.json",
+      "type": "application/geo+json",
+      "title": "Tajikistan"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=TL/Timor-Leste.json",
+      "type": "application/geo+json",
+      "title": "Timor-Leste"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=TM/Turkmenistan.json",
+      "type": "application/geo+json",
+      "title": "Turkmenistan"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=TN/Tunisia.json",
+      "type": "application/geo+json",
+      "title": "Tunisia"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=TO/Tonga.json",
+      "type": "application/geo+json",
+      "title": "Tonga"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=TR/T\u00fcrkiye.json",
+      "type": "application/geo+json",
+      "title": "T\u00fcrkiye"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=TT/Trinidad_and_Tobago.json",
+      "type": "application/geo+json",
+      "title": "Trinidad_and_Tobago"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=TW/Taiwan.json",
+      "type": "application/geo+json",
+      "title": "Taiwan, Province of China"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=UA/Ukraine.json",
+      "type": "application/geo+json",
+      "title": "Ukraine"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=UG/Uganda.json",
+      "type": "application/geo+json",
+      "title": "Uganda"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=UM/US_Minor_Outlying_Islands.json",
+      "type": "application/geo+json",
+      "title": "US_Minor_Outlying_Islands"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=UY/Uruguay.json",
+      "type": "application/geo+json",
+      "title": "Uruguay"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=UZ/Uzbekistan.json",
+      "type": "application/geo+json",
+      "title": "Uzbekistan"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=VC/Saint_Vincent_and_the_Grenadines.json",
+      "type": "application/geo+json",
+      "title": "Saint_Vincent_and_the_Grenadines"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=VE/Venezuela.json",
+      "type": "application/geo+json",
+      "title": "Venezuela, Bolivarian Republic of"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=VN/Vietnam.json",
+      "type": "application/geo+json",
+      "title": "Viet Nam"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=VU/Vanuatu.json",
+      "type": "application/geo+json",
+      "title": "Vanuatu"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=WS/Samoa.json",
+      "type": "application/geo+json",
+      "title": "Samoa"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=YE/Yemen.json",
+      "type": "application/geo+json",
+      "title": "Yemen"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=YT/Mayotte.json",
+      "type": "application/geo+json",
+      "title": "Mayotte"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=ZA/South_Africa.json",
+      "type": "application/geo+json",
+      "title": "South_Africa"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=ZM/Zambia.json",
+      "type": "application/geo+json",
+      "title": "Zambia"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=ZW/Zimbabwe.json",
+      "type": "application/geo+json",
+      "title": "Zimbabwe"
+    },
+    {
+      "rel": "item",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=ZZ/Unknown.json",
+      "type": "application/geo+json",
+      "title": "ZZ"
+    },
+    {
+      "rel": "child",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=AU/catalog.json",
+      "type": "application/json",
+      "title": "Australia"
+    },
+    {
+      "rel": "child",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=BR/catalog.json",
+      "type": "application/json",
+      "title": "Brazil"
+    },
+    {
+      "rel": "child",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=CN/catalog.json",
+      "type": "application/json",
+      "title": "China"
+    },
+    {
+      "rel": "child",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=ET/catalog.json",
+      "type": "application/json",
+      "title": "Ethiopia"
+    },
+    {
+      "rel": "child",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=IN/catalog.json",
+      "type": "application/json",
+      "title": "India"
+    },
+    {
+      "rel": "child",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=NG/catalog.json",
+      "type": "application/json",
+      "title": "Nigeria"
+    },
+    {
+      "rel": "child",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=PK/catalog.json",
+      "type": "application/json",
+      "title": "Pakistan"
+    },
+    {
+      "rel": "child",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=TZ/catalog.json",
+      "type": "application/json",
+      "title": "Tanzania, United Republic of"
+    },
+    {
+      "rel": "child",
+      "href": "./alpha/results-by-admin-conf/admin:country_code=US/catalog.json",
+      "type": "application/json",
+      "title": "United States"
+    },
+    {
+      "rel": "agents",
+      "href": "./AGENTS.md",
+      "type": "text/markdown",
+      "title": "Guidance for AI agents"
+    },
+    {
+      "rel": "describedby",
+      "href": "./README.md",
+      "type": "text/markdown",
+      "title": "Human-readable documentation"
+    },
+    {
+      "rel": "pmtiles",
+      "href": "https://data.source.coop/ftw/global-field-boundaries/pmtiles/ftw-global-fields-2025.pmtiles",
+      "type": "application/vnd.pmtiles",
+      "title": "Field boundaries 2025 (PMTiles, default web view)",
+      "pmtiles:layers": [
+        "fields"
+      ]
+    },
+    {
+      "rel": "pmtiles",
+      "href": "https://data.source.coop/ftw/global-data/predictions/vectors/alpha/2024_with_confidence.pmtiles",
+      "type": "application/vnd.pmtiles",
+      "title": "Field boundaries 2024 with confidence (PMTiles)",
+      "pmtiles:layers": [
+        "2024"
+      ]
+    }
+  ],
+  "assets": {
+    "pmtiles_2025": {
+      "href": "https://data.source.coop/ftw/global-field-boundaries/pmtiles/ftw-global-fields-2025.pmtiles",
+      "type": "application/vnd.pmtiles",
+      "title": "Field boundaries 2025 (PMTiles, default web view)",
+      "roles": [
+        "visual"
+      ]
+    },
+    "pmtiles_2024_confidence": {
+      "href": "https://data.source.coop/ftw/global-data/predictions/vectors/alpha/2024_with_confidence.pmtiles",
+      "type": "application/vnd.pmtiles",
+      "title": "Field boundaries 2024 with confidence (PMTiles)",
+      "roles": [
+        "visual"
+      ]
+    },
+    "styles/2025": {
+      "href": "./styles/2025.json",
+      "type": "application/vnd.mapbox.style+json",
+      "title": "Field boundaries (2025) \u2014 default",
+      "roles": [
+        "style",
+        "default"
+      ],
+      "file:size": 992,
+      "file:checksum": "1220276ca0c91a4ffe2d5a4890a1d35eb392c81971d0a22c884a1f7bdaf7aaa33571"
+    },
+    "styles/2024": {
+      "href": "./styles/2024.json",
+      "type": "application/vnd.mapbox.style+json",
+      "title": "Field boundaries (2024)",
+      "roles": [
+        "style"
+      ],
+      "file:size": 992,
+      "file:checksum": "1220cb09637c6b59ec8ee85039240a75708d17b609b89ca1d2395452b7fc775bb3fe"
+    },
+    "styles/confidence-2025": {
+      "href": "./styles/confidence-2025.json",
+      "type": "application/vnd.mapbox.style+json",
+      "title": "Field boundaries by confidence (2025)",
+      "roles": [
+        "style"
+      ],
+      "file:size": 3286,
+      "file:checksum": "12207333ef98cbe0620638d0823aaf85a3be9221e5145b8eed18c7c9373c869164b6"
+    },
+    "styles/confidence-2024": {
+      "href": "./styles/confidence-2024.json",
+      "type": "application/vnd.mapbox.style+json",
+      "title": "Field boundaries by confidence (2024)",
+      "roles": [
+        "style"
+      ],
+      "file:size": 3284,
+      "file:checksum": "1220a36365a320d851fa7d5fb7794301888865e56678c7f4079151690a01da6d9df9"
+    },
+    "thumbnail": {
+      "href": "https://data.source.coop/ftw/global-data/docs/global-ftw-map.png",
+      "type": "image/png",
+      "title": "Global field-boundary predictions map",
+      "roles": [
+        "thumbnail",
+        "overview"
+      ]
+    },
+    "documentation": {
+      "href": "./llms.txt",
+      "type": "text/markdown",
+      "title": "Agent/LLM usage guide",
+      "roles": [
+        "documentation"
+      ],
+      "file:size": 5246,
+      "file:checksum": "122029af0dbcb538cbc38a211c6c8ecf30fac2c83b7f06e7e967c339386a5a9e26a2"
+    },
+    "README": {
+      "href": "./README.md",
+      "type": "text/markdown",
+      "title": "Human-readable README",
+      "roles": [
+        "metadata"
+      ],
+      "file:size": 6940,
+      "file:checksum": "1220d4e9f9cad5fed302f4505e9fc2a78916461dd3dd510ed0d78547033e63371ed2"
+    }
+  },
+  "updated": "2026-09-03T22:46:37Z",
+  "partition:glob": "https://data.source.coop/ftw/global-data/predictions/vectors/alpha/results-by-admin-conf/admin:country_code=*/*.parquet"
+}

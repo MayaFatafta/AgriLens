@@ -1,0 +1,24 @@
+{
+  "source": "NASA EMIT L2A RFL via Google Earth Engine",
+  "scene_id": "EMIT_L2A_RFL_001_20250615T113555_2516607_021",
+  "acquisition_date": "2025-06-15",
+  "verification": "Original Earth Engine source-flag histograms",
+  "verified_field_ids": [
+    1487525, 1664797, 1664849,
+    1664852, 1664853, 1664855
+  ],
+  "observed_flag_values": {
+    "aggregate_flag": [1],
+    "dilated_cloud_flag": [1],
+    "cloud_flag": [0],
+    "cirrus_flag": [0],
+    "water_flag": [0],
+    "spacecraft_flag": [0]
+  },
+  "interpretation": "All evaluated source pixels were flagged by the dilated-cloud buffer.",
+  "decision": "Retain missing hyperspectral values; do not relax source quality screening.",
+  "remaining_limitations": [
+    "Geographic selection bias remains.",
+    "No independently verified dust/drought crop-damage labels."
+  ]
+}

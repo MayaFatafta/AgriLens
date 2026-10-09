@@ -1,0 +1,90 @@
+{
+  "warning": "DEMONSTRATION ONLY: 3 train fields, NOT a validated predictive model.",
+  "fit_split": "train",
+  "n_training_fields": 3,
+  "features_used": [
+    "emit_ndvi_median",
+    "emit_ndre_median",
+    "emit_ndmi_median",
+    "r665",
+    "r705",
+    "r750",
+    "r860",
+    "r1650",
+    "r2200",
+    "red_edge_slope_705_750",
+    "nir_to_red_reflectance_ratio",
+    "swir_1650_minus_2200"
+  ],
+  "parameters": {
+    "emit_ndvi_median": {
+      "train_mean": 0.3725344141324361,
+      "train_std_population": 0.07160319747479522,
+      "is_constant_in_training": false
+    },
+    "emit_ndre_median": {
+      "train_mean": 0.2397689918677012,
+      "train_std_population": 0.05539821805604821,
+      "is_constant_in_training": false
+    },
+    "emit_ndmi_median": {
+      "train_mean": 0.03752752238263684,
+      "train_std_population": 0.06570466798446734,
+      "is_constant_in_training": false
+    },
+    "r665": {
+      "train_mean": 0.1748737494150797,
+      "train_std_population": 0.017047643141162607,
+      "is_constant_in_training": false
+    },
+    "r705": {
+      "train_mean": 0.23464467128117872,
+      "train_std_population": 0.011757440529652797,
+      "is_constant_in_training": false
+    },
+    "r750": {
+      "train_mean": 0.34029574195543927,
+      "train_std_population": 0.025138265256992264,
+      "is_constant_in_training": false
+    },
+    "r860": {
+      "train_mean": 0.3833160201708476,
+      "train_std_population": 0.030042326446967475,
+      "is_constant_in_training": false
+    },
+    "r1650": {
+      "train_mean": 0.3662334581216176,
+      "train_std_population": 0.03454577186916873,
+      "is_constant_in_training": false
+    },
+    "r2200": {
+      "train_mean": 0.2716713051001231,
+      "train_std_population": 0.047529054637315334,
+      "is_constant_in_training": false
+    },
+    "red_edge_slope_705_750": {
+      "train_mean": 0.0023607889838945313,
+      "train_std_population": 0.0007959231090284864,
+      "is_constant_in_training": false
+    },
+    "nir_to_red_reflectance_ratio": {
+      "train_mean": 2.2289858164841587,
+      "train_std_population": 0.3929370766599314,
+      "is_constant_in_training": false
+    },
+    "swir_1650_minus_2200": {
+      "train_mean": 0.09456215302149455,
+      "train_std_population": 0.01310589637389111,
+      "is_constant_in_training": false
+    }
+  },
+  "training_constant_features": [],
+  "bands_used_nm": {
+    "r665": 663.5534057617188,
+    "r705": 708.2957763671875,
+    "r750": 753.0482177734375,
+    "r860": 857.5059814453125,
+    "r1650": 1647.642578125,
+    "r2200": 2197.00927734375
+  }
+}

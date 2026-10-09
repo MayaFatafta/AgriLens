@@ -1,0 +1,50 @@
+{
+  "status": "ADDITIVE_REAL_DATA_FEATURE_ENHANCEMENT_NO_NEW_OBSERVATIONS",
+  "master_data_unchanged": true,
+  "same_field_date_keys": true,
+  "rows_before": 615,
+  "rows_after": 615,
+  "unique_fields": 20,
+  "shared_columns_verified_identical": 19,
+  "geographic_split_preserved": true,
+  "new_operational_columns": [
+    "v2_ndvi_slope3_total",
+    "v2_ndvi_dev_from_prev5_median",
+    "v2_cusum_neg"
+  ],
+  "retrospective_columns_in_separate_file": [
+    "retro_next_delta_ndvi",
+    "retro_temporal_pattern"
+  ],
+  "synthetic_rows_joined": 0,
+  "independently_verified_damage_labels_added": 0,
+  "feature_derivation": "v2 past/current observation indices; one-sided CUSUM, 3-observation difference, trailing 5-observation median",
+  "cautions": [
+    "Quality-failed current rows have new feature values set to missing; past poor-quality observations can still affect v2 trailing-window features and should be rechecked before predictive use.",
+    "Retrospective patterns use future observations and must NOT be model inputs.",
+    "Regional atmospheric/soil-moisture context is not field-specific exposure.",
+    "No new independent observations, dust/drought labels, or geographic coverage."
+  ],
+  "per_split": {
+    "test": {
+      "rows": 157,
+      "fields": 5
+    },
+    "train": {
+      "rows": 275,
+      "fields": 9
+    },
+    "validation": {
+      "rows": 183,
+      "fields": 6
+    }
+  },
+  "input_sha256": {
+    "egypt_field_date_proxy_screening.csv": "ef87db4a308f4475f95ae265e88275a4dfb344770ab34d4d303ba0a388bafa31",
+    "agrilens_real_field_date_tidy.csv": "8653d566311229ce86e007089602efffb2b9c05a877436e51f60aac9ceeb66b6"
+  },
+  "output_sha256": {
+    "enhanced_real_field_date_screening.csv": "358efdb14fbe545c5822e5071599a33fe051f0a8c550827f8119e057bb5ff0af",
+    "retrospective_temporal_patterns_NOT_FOR_MODEL.csv": "3f7354170edd94fff40ae81afeb88d6907f191fbf9c35ebee6423fe819aba47c"
+  }
+}

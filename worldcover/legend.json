@@ -1,0 +1,19 @@
+{
+  "year": 2021,
+  "source_id": "ESA_WorldCover_10m_2021_v200_N30E030",
+  "source_url": "https://ai4edataeuwest.blob.core.windows.net/esa-worldcover/v200/2021/map/ESA_WorldCover_10m_2021_v200_N30E030_Map.tif",
+  "classes": {
+    "10": "Tree cover",
+    "20": "Shrubland",
+    "30": "Grassland",
+    "40": "Cropland",
+    "50": "Built-up",
+    "60": "Bare/sparse vegetation",
+    "70": "Snow/ice",
+    "80": "Permanent water",
+    "90": "Herbaceous wetland",
+    "95": "Mangroves",
+    "100": "Moss/lichen"
+  },
+  "caution": "2021 reference; not a 2025 crop inventory."
+}

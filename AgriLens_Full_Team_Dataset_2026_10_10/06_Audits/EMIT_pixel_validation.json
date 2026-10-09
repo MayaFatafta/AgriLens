@@ -1,0 +1,61 @@
+{
+  "status": "REAL_EMIT_AOI_PIXELS_PROCESSED_NOT_STRESS_LABELS",
+  "sensor": "NASA EMIT L2A",
+  "scene_id": "EMIT_L2A_RFL_001_20250615T113555_2516607_021",
+  "acquired_utc": "2025-06-15T11:35:55Z",
+  "aoi_bbox_wgs84": [
+    30.233981027,
+    30.616148385,
+    30.266014636,
+    30.643850061
+  ],
+  "scene_bounds_wgs84": [
+    30.232588871313013,
+    30.615377978559216,
+    30.267169921629797,
+    30.64475501899998
+  ],
+  "pixels_total": 2862,
+  "pixels_quality_valid": 1860,
+  "pixels_indices_valid": 1860,
+  "bands_original": 285,
+  "bands_retained": 240,
+  "selected_bands": {
+    "blue": {
+      "one_based_band": 16,
+      "wavelength_nm": 492.2452087402344
+    },
+    "green": {
+      "one_based_band": 25,
+      "wavelength_nm": 559.2264404296875
+    },
+    "red": {
+      "one_based_band": 39,
+      "wavelength_nm": 663.5534057617188
+    },
+    "red_edge": {
+      "one_based_band": 45,
+      "wavelength_nm": 708.2957763671875
+    },
+    "nir": {
+      "one_based_band": 65,
+      "wavelength_nm": 857.5059814453125
+    },
+    "swir": {
+      "one_based_band": 171,
+      "wavelength_nm": 1647.642578125
+    }
+  },
+  "index_means": {
+    "NDVI": 0.4055217206478119,
+    "NDRE": 0.2574019432067871,
+    "NDMI": 0.06887489557266235
+  },
+  "limitations": [
+    "Same AOI but may be different day than Sentinel-2",
+    "NASA EMIT is not EnMAP, Planet Tanager or Satellite 813",
+    "Quality screening does not create crop-stress/drought/dust ground truth",
+    "Pixel validity confirmed; field polygon alignment not performed by this script",
+    "Scene provenance is taken from Earth Engine export metadata"
+  ]
+}

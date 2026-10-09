@@ -1,0 +1,9 @@
+numpy
+pandas
+pyarrow
+geopandas
+rasterio>=1.4
+pyproj
+shapely
+fsspec
+aiohttp

@@ -1,0 +1,25 @@
+column,unit_or_type,definition,time_availability,caution
+field_id,ID,Spatial crosswalk field identifier,excluded from predictors,"FTW matched polygon, not official ownership"
+date,YYYY-MM-DD,Sentinel-2 field observation date,current,date available with observation
+ml_split,train|validation|test,Geography + time constrained membership,excluded from predictors,test is later and spatially disjoint
+target_date,YYYY-MM-DD,Next accepted clear field observation date,future; never feature,only for evaluation
+target_ndvi_next,unitless NDVI,Actual next accepted Sentinel-2 mean field NDVI,future target,"satellite-derived label, not crop health ground truth"
+target_horizon_days,days,Difference between origin date and next clear date,future; never feature,retrospectively 3–18 days
+ndvi_mean,unitless,Mean present-date normalized vegetation index,current predictor,"spectral proxy, not yield"
+ndmi_mean,unitless,Mean current canopy-water related index,current predictor,cannot measure soil moisture directly
+evi_mean,unitless,Mean current enhanced vegetation index,current predictor,spectral proxy
+aot_s2_mean,derived AOT,Current Sentinel-2 Level-2A aerosol optical thickness,current predictor,verify reflectance/scaling
+ndvi_change_from_prev,NDVI units,Current minus previous accepted field NDVI,past/current predictor,NaN for first accepted field record
+ndmi_change_from_prev,NDMI units,Current minus previous accepted field NDMI,past/current predictor,NaN for first accepted field record
+days_since_prev,days,Days since previous accepted observation,past/current predictor,not time to future target
+pixel_count,count,Number of valid pixels assigned to field at current scene,current predictor,smaller fields have less stable summary
+t2m_c,degrees Celsius,Modeled ambient air temperature,current predictor,Open-Meteo regional context
+precip_48h,mm,Modeled trailing 48-hour rainfall,current predictor,regional context
+wind_max_48h,m/s,Maximum trailing 48-hour wind speed,current predictor,regional context
+dust_max_48h,micrograms/m3,Modeled trailing 48-hour dust peak,current predictor,"regional CAMS, not per-field exposure"
+aod_max_48h,unitless,Modeled trailing 48-hour aerosol optical depth peak,current predictor,regional CAMS
+soil_moisture_28_to_100cm,m3/m3,Modeled 28–100cm volumetric soil moisture,current predictor,regional gridded modeled value
+sm_change_7d,m3/m3,7-day change in modeled soil moisture,current predictor,missing for initial history
+sm_change_48h,m3/m3,2-day change in modeled soil moisture,current predictor,missing for initial history
+day_of_year,day of year,Day of year 1–366,current predictor,seasonal proxy
+coverage_ratio_vs_p90,fraction,Valid pixel count / retrospective whole-season p90,excluded from predictors,used in retrospective row filtering; not online

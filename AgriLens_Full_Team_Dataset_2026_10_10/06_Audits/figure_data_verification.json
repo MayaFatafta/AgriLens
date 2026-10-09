@@ -1,0 +1,24 @@
+{
+  "source": "AgriLens_Integrated_Real_Datasets_v1",
+  "real_field_date_records": 615,
+  "unique_fields": 20,
+  "unique_dates": 33,
+  "source_em_it_scene": "EMIT_L2A_RFL_001_20250615T113555_2516607_021",
+  "hyperspectral_fields": 14,
+  "wavelength_count": 232,
+  "spectral_records": 3248,
+  "screening_decline_count": 30,
+  "screening_dust_decline_count": 3,
+  "screening_moisture_decline_count": 5,
+  "high_priority_review_records": 9,
+  "verified_damage_labels": 0,
+  "flags_regional_by_date": true,
+  "figure_count": 8,
+  "cautions": [
+    "All screening outputs are noncausal proxies",
+    "EMIT and S2 are different dates, resolutions and spectral response functions",
+    "Modeled environmental values do not vary across fields on the same date",
+    "EMIT missingness concentrates in training fields",
+    "Retrospective labels and semi-synthetic data were not used to generate these plots"
+  ]
+}

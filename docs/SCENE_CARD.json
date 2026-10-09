@@ -1,0 +1,15 @@
+{
+  "scene_id": "20250501_143138_87_4001",
+  "sensor": "Planet Tanager-1",
+  "date_utc": "2025-05-01T14:31:38Z",
+  "location": "Campo Verde, Mato Grosso, Brazil",
+  "application": "hyperspectral vegetation proof-of-concept",
+  "type": "orthorectified surface reflectance HDF5",
+  "asset_url": "https://storage.googleapis.com/open-cogs/planet-stac/tanager1-release2-core-imagery/ortho_sr_hdf5/20250501_143138_87_4001_ortho_sr_hdf5.h5",
+  "source_reference": "https://planetlabs.github.io/tanager-opendata-edu/module-4/spectral-indices-p2/",
+  "catalog": "https://www.planet.com/data/stac/browser/tanager-core-imagery/agriculture/collection.json",
+  "collection_license": "CC-BY-4.0; cite Planet Labs PBC and inspect item/asset license",
+  "status": "PUBLIC_LINK_IDENTIFIED_NOT_DOWNLOADED_IN_CHATGPT_ENVIRONMENT",
+  "relation_to_agrilens_existing_egypt_aoi": "SEPARATE_SCENE_NOT_OVERLAPPING",
+  "do_not_claim": ["Satellite 813 measurements", "Egypt or Jordan acquisition", "validated crop-stress ground truth", "hyperspectral superiority without comparable held-out evidence"]
+}

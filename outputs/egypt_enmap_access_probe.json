@@ -1,0 +1,68 @@
+{
+  "access_only_not_local_data_QA": true,
+  "assets": {
+    "image": {
+      "http_status": 206,
+      "content_type": "image/tiff",
+      "final_url_host": "download.geoservice.dlr.de",
+      "asset_signature_verified": true,
+      "redirected": false,
+      "size_header": "32",
+      "reason": "Valid file signature"
+    },
+    "metadata": {
+      "http_status": 206,
+      "content_type": "application/xml",
+      "final_url_host": "download.geoservice.dlr.de",
+      "asset_signature_verified": true,
+      "redirected": false,
+      "size_header": "32",
+      "reason": "Valid file signature"
+    },
+    "quality_cloud": {
+      "http_status": 206,
+      "content_type": "image/tiff",
+      "final_url_host": "download.geoservice.dlr.de",
+      "asset_signature_verified": true,
+      "redirected": false,
+      "size_header": "32",
+      "reason": "Valid file signature"
+    },
+    "quality_cloud_shadow": {
+      "http_status": 206,
+      "content_type": "image/tiff",
+      "final_url_host": "download.geoservice.dlr.de",
+      "asset_signature_verified": true,
+      "redirected": false,
+      "size_header": "32",
+      "reason": "Valid file signature"
+    },
+    "quality_haze": {
+      "http_status": 206,
+      "content_type": "image/tiff",
+      "final_url_host": "download.geoservice.dlr.de",
+      "asset_signature_verified": true,
+      "redirected": false,
+      "size_header": "32",
+      "reason": "Valid file signature"
+    },
+    "quality_classes": {
+      "http_status": 206,
+      "content_type": "image/tiff",
+      "final_url_host": "download.geoservice.dlr.de",
+      "asset_signature_verified": true,
+      "redirected": false,
+      "size_header": "32",
+      "reason": "Valid file signature"
+    },
+    "defective_pixel_mask": {
+      "http_status": 206,
+      "content_type": "image/tiff",
+      "final_url_host": "download.geoservice.dlr.de",
+      "asset_signature_verified": true,
+      "redirected": false,
+      "size_header": "32",
+      "reason": "Valid file signature"
+    }
+  }
+}

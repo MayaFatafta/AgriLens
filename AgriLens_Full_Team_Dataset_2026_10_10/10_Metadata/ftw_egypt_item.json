@@ -1,0 +1,211 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
+    "https://stac-extensions.github.io/vector/v0.1.0/schema.json",
+    "https://stac-extensions.github.io/table/v1.2.0/schema.json",
+    "https://stac-extensions.github.io/file/v2.1.0/schema.json"
+  ],
+  "id": "Egypt",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          24.705268340601403,
+          21.932982245030395
+        ],
+        [
+          36.894373793161215,
+          21.932982245030395
+        ],
+        [
+          36.894373793161215,
+          31.6698756491266
+        ],
+        [
+          24.705268340601403,
+          31.6698756491266
+        ],
+        [
+          24.705268340601403,
+          21.932982245030395
+        ]
+      ]
+    ]
+  },
+  "bbox": [
+    24.705268340601403,
+    21.932982245030395,
+    36.894373793161215,
+    31.6698756491266
+  ],
+  "properties": {
+    "title": "Egypt",
+    "description": "Agricultural field boundaries for Egypt. Part of [Fields of the World](https://fieldsofthe.world) \u2014 agricultural field boundaries delineated by the PRUE model from Sentinel-2 imagery. This partition contains 9,207,446 field polygons; 94% fall within the modeled-confidence layer's coverage (confidence 0\u2013100, here 5\u2013100; null elsewhere means outside the layer's coverage, not low confidence). A GeoParquet vector dataset is derived from the [prediction Zarr](https://data.source.coop/ftw/global-data/predictions/zarr/collection.json) by thresholding the softmax outputs for [non_field_background, field, field_boundaries] at 0.5 and polygonizing. Columns: id, geometry, bbox, metrics:area, metrics:perimeter, determination:datetime, determination:method, admin:country_code, admin:subdivision_code, confidence \u2014 see `table:columns` for definitions (including how `confidence` is derived).",
+    "datetime": null,
+    "start_datetime": "2024-01-01T00:00:00Z",
+    "end_datetime": "2025-12-31T23:59:59Z",
+    "admin:country_code": "EG",
+    "proj:code": "EPSG:4326",
+    "geoparquet:geometry_type": "Polygon",
+    "geoparquet:feature_count": 9207446,
+    "table:columns": [
+      {
+        "name": "id",
+        "type": "string",
+        "description": "An identifier for the field. Must be unique per collection. ([fiboa core](https://github.com/fiboa/specification/blob/main/core/README.md))"
+      },
+      {
+        "name": "geometry",
+        "type": "binary",
+        "description": "A geometry that reflects the footprint of the field, usually a Polygon. Default CRS is WGS84. ([fiboa core](https://github.com/fiboa/specification/blob/main/core/README.md))"
+      },
+      {
+        "name": "bbox",
+        "type": "struct",
+        "description": "The bounding box of the field. ([fiboa core](https://github.com/fiboa/specification/blob/main/core/README.md))"
+      },
+      {
+        "name": "metrics:area",
+        "type": "float",
+        "description": "Area of the field, in square meters (m\u00b2). Must be > 0. ([vecorel geometry-metrics](https://github.com/vecorel/geometry-metrics-extension))"
+      },
+      {
+        "name": "metrics:perimeter",
+        "type": "float",
+        "description": "Perimeter of the field, in meters (m). Must be > 0. ([vecorel geometry-metrics](https://github.com/vecorel/geometry-metrics-extension))"
+      },
+      {
+        "name": "determination:datetime",
+        "type": "timestamp",
+        "description": "The last timestamp at which the field did exist and was observed, in the UTC timezone. ([fiboa core](https://github.com/fiboa/specification/blob/main/core/README.md))"
+      },
+      {
+        "name": "determination:method",
+        "type": "string",
+        "description": "The boundary creation method (one of: manual, surveyed, driven, auto-operation, auto-imagery, unknown). ([fiboa core](https://github.com/fiboa/specification/blob/main/core/README.md))"
+      },
+      {
+        "name": "admin:country_code",
+        "type": "string",
+        "description": "ISO 3166-1 alpha-2 country code (aka admin0). Two-letter country code for the country that contains the field. ([vecorel administrative-division](https://github.com/vecorel/administrative-division-extension))"
+      },
+      {
+        "name": "admin:subdivision_code",
+        "type": "string",
+        "description": "ISO 3166-2 code for the principal subdivision (e.g. province or state, aka admin1) of a country that contains the field. Only the subdivision part of the code is stored. ([vecorel administrative-division](https://github.com/vecorel/administrative-division-extension))"
+      },
+      {
+        "name": "confidence",
+        "type": "float",
+        "description": "Derived; not part of the upstream model output. Modeled PRUE confidence on a 0\u2013100 scale, sampled at the field's point-on-surface from the 500 m confidence COG ([predictions/confidence](https://data.source.coop/ftw/global-data/predictions/confidence/collection.json)) and rescaled `raw / 0.578178 * 100`, clamped to 100 (0.578178 is treated as 100%, matching the FTW inference app; this centroid sample is the closest single value to the app's `confidence_mean`); **null where the field falls outside the modeled-confidence layer's coverage \u2014 i.e. no value there, not a low score** (the layer is sparse and conservative, fully covering mainly the 24 FTW-labelled training countries). Recommended reliability filter: `confidence >= 69` (raw 0.4). Reflects 500 m cell-level model reliability, not individual-polygon geometric accuracy. Generated by [add_confidence.py](https://github.com/fieldsoftheworld/ftw-data-catalog/blob/main/scripts/confidence/add_confidence.py) (+ process_partition.sh, run_rails.sh, make_pmtiles.py)."
+      }
+    ],
+    "portolan:styles": [
+      "style-2025",
+      "style-2024",
+      "style-confidence-2025",
+      "style-confidence-2024"
+    ]
+  },
+  "collection": "vectors",
+  "assets": {
+    "data": {
+      "href": "./Egypt.parquet",
+      "type": "application/vnd.apache.parquet",
+      "title": "Egypt field boundaries (GeoParquet)",
+      "roles": [
+        "data"
+      ]
+    },
+    "pmtiles": {
+      "href": "./Egypt.pmtiles",
+      "type": "application/vnd.pmtiles",
+      "title": "Egypt field boundaries (PMTiles, 2024/2025 layers)",
+      "roles": [
+        "visual"
+      ]
+    },
+    "style-2025": {
+      "href": "./Egypt.2025.style.json",
+      "type": "application/vnd.mapbox.style+json",
+      "title": "MapLibre style \u2014 field boundaries (2025)",
+      "roles": [
+        "style"
+      ],
+      "file:size": 899,
+      "file:checksum": "1220d8ccede5471ca2d1960db3e83253270bb061a86a1c705f6bdf2e31c8081bedd8"
+    },
+    "style-2024": {
+      "href": "./Egypt.2024.style.json",
+      "type": "application/vnd.mapbox.style+json",
+      "title": "MapLibre style \u2014 field boundaries (2024)",
+      "roles": [
+        "style"
+      ],
+      "file:size": 899,
+      "file:checksum": "122004f3d32b5c14ef44fb8a86c851c501420b9899e1dde0fee479f06b00b9b6e361"
+    },
+    "style-confidence-2025": {
+      "href": "./Egypt.confidence-2025.style.json",
+      "type": "application/vnd.mapbox.style+json",
+      "title": "MapLibre style \u2014 by confidence (2025)",
+      "roles": [
+        "style"
+      ],
+      "file:size": 2643,
+      "file:checksum": "122027c5023469bbdef371d6cef93dc10438db6fea059b99df68f6913a75458fd7f3"
+    },
+    "style-confidence-2024": {
+      "href": "./Egypt.confidence-2024.style.json",
+      "type": "application/vnd.mapbox.style+json",
+      "title": "MapLibre style \u2014 by confidence (2024)",
+      "roles": [
+        "style"
+      ],
+      "file:size": 2643,
+      "file:checksum": "122097b7b871abf0a6bee503df3a5436e76a50fb313cdc6daf7274fd054471c40a6e"
+    },
+    "README": {
+      "href": "./Egypt.README.md",
+      "type": "text/markdown",
+      "title": "Egypt \u2014 README",
+      "roles": [
+        "metadata"
+      ],
+      "file:size": 4581,
+      "file:checksum": "1220dd22bb12ffda464d55332da98ef004c08a1c9b63445c8ab7c18fa6c13bf02cff"
+    }
+  },
+  "links": [
+    {
+      "rel": "root",
+      "href": "../../../../../catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "collection",
+      "href": "../../../collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "../../../collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "derived_from",
+      "href": "https://data.source.coop/ftw/global-data/predictions/zarr/collection.json",
+      "type": "application/json",
+      "title": "FTW prediction probabilities (Zarr)"
+    },
+    {
+      "rel": "llms",
+      "href": "./llms.txt",
+      "type": "text/markdown",
+      "title": "Agent/LLM usage guide"
+    }
+  ]
+}

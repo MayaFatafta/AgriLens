@@ -1,0 +1,7 @@
+field_id,field_split,emit_field_pixel_centers_total,emit_valid_pixel_count,emit_quality_coverage_fraction,s2_ndvi_mean,s2_pixel_count_20m
+1664797,train,11,0,0.0,0.3440732,87
+1664849,train,9,0,0.0,0.39643955,68
+1664852,train,4,0,0.0,0.42306566,28
+1664853,train,62,0,0.0,0.43910134,558
+1664855,train,3,0,0.0,0.48073512,52
+1487525,train,6,0,0.0,0.35740045,43

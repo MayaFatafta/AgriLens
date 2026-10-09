@@ -1,0 +1,68 @@
+{
+  "project": "AgriLens — Dust or Drought?",
+  "created_utc": "2026-10-08T21:29:01.565803+00:00",
+  "aoi": {
+    "center_lonlat": [
+      30.25,
+      30.63
+    ],
+    "utm_epsg": 32636,
+    "bounds_utm_m": [
+      234911.14377090283,
+      3390322.24849958,
+      237911.14377090283,
+      3393322.24849958
+    ],
+    "bbox_lonlat": [
+      30.233981026964887,
+      30.616148384625077,
+      30.26601463596816,
+      30.643850060834968
+    ],
+    "dates": [
+      "2025-03-01",
+      "2025-09-30"
+    ]
+  },
+  "product": "Cropped public-source inputs and derived feature tables, no independent causal labels",
+  "sources": {
+    "ftw": "https://source.coop/ftw/global-data/predictions/vectors",
+    "sentinel2": "https://planetarycomputer.microsoft.com/api/stac/v1 | sentinel-2-l2a",
+    "modis": [
+      "https://planetarycomputer.microsoft.com/api/stac/v1 | modis-13Q1-061",
+      "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset"
+    ],
+    "worldcover": "https://planetarycomputer.microsoft.com/api/stac/v1 | esa-worldcover, 2021 v200",
+    "weather": "https://archive-api.open-meteo.com/v1/archive",
+    "dust_aerosol": "https://air-quality-api.open-meteo.com/v1/air-quality | CAMS global modeled values",
+    "nasa_power": "https://power.larc.nasa.gov/api/temporal/daily/point",
+    "enmap": "https://geoservice.dlr.de/eoc/ogc/stac/v1 | ENMAP_HSI_L2A, catalog metadata only"
+  },
+  "sentinel2_processing": {
+    "raw_grid_m": 10,
+    "feature_grid_m": 20,
+    "B11_and_SCL_native_grid_m": 20,
+    "reflectance_scale_and_offsets": "Per-scene STAC metadata with ESA processing-baseline fallback, recorded in sentinel2/scene_audit.json",
+    "resampling": "nearest neighbor",
+    "excluded_scl": [
+      0,
+      1,
+      2,
+      3,
+      6,
+      8,
+      9,
+      10,
+      11
+    ],
+    "index_filter": "NDVI and NDMI within [-1,1], finite EVI; valid reflectance range (-0.05,1.2)",
+    "selection": "5 distinct acquisition dates/month, scene cloud<40%, one AOI-covering tile/date",
+    "cloud_caution": "Class 7 remains (unclassified). Tile cloud cover is not AOI-specific."
+  },
+  "temporal_features": "Difference from previous valid observation of the same common-grid pixel; positive elapsed time required",
+  "environment": "08:00 UTC daily snapshot with trailing context; no prior-date padding, so first windows have missing values",
+  "split": "Indicative 500 m spatial blocks, 30% held out, seed 42. Does not guarantee independent samples.",
+  "integration": "Pixel centers assigned to predicted FTW fields; separate MODIS context and EnMAP metadata",
+  "licenses_and_citations": "See README.md and retained source metadata",
+  "enmap_status": "Matching scene identified; image/XML download redirected to DLR login; no image data included"
+}

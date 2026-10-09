@@ -1,0 +1,25 @@
+{
+  "source": "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset?latitude=30.63&longitude=30.25&startDate=A2025193&endDate=A2025273&kmAboveBelow=3&kmLeftRight=3",
+  "additional_source_requests": [
+    "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset?latitude=30.63&longitude=30.25&startDate=A2023049&endDate=A2023049&kmAboveBelow=3&kmLeftRight=3",
+    "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset?latitude=30.63&longitude=30.25&startDate=A2024225&endDate=A2024225&kmAboveBelow=3&kmLeftRight=3",
+    "https://modis.ornl.gov/rst/api/v1/MOD13Q1/subset?latitude=30.63&longitude=30.25&startDate=A2024353&endDate=A2024353&kmAboveBelow=3&kmLeftRight=3"
+  ],
+  "product": "MOD13Q1 Collection 6.1",
+  "source_format": "ORNL native pixel subsets in JSON",
+  "output_format": "native sinusoidal GeoTIFF",
+  "added_dates": [
+    "2023-02-18",
+    "2024-08-12",
+    "2024-12-18",
+    "2025-07-12",
+    "2025-07-28",
+    "2025-08-13",
+    "2025-08-29",
+    "2025-09-14",
+    "2025-09-30"
+  ],
+  "grid_note": "Native pixel edges are retained; crop covers the AOI geographic bounding box.",
+  "transform_note": "ORNL xllcorner/yllcorner identify lower-left outer grid corner. Row-major arrays start at upper-left.",
+  "tool_citation": "ORNL DAAC (2018), TESViS RESTful Web Service, https://doi.org/10.3334/ORNLDAAC/1600"
+}
