@@ -1,0 +1,83 @@
+{
+  "input_file": "/workspace/scratch/c0403863d728/work/AgriLens_GitHub_Ready_FINAL/validation/data/agrilens_real_field_date_QA_gated_615.csv",
+  "input_sha256": "5919ffbdc2b33b6f3b3fd9c31f534889d80b2aa80cce4ceed1f04192a21c30c6",
+  "rows_in_input": 615,
+  "unique_fields": 20,
+  "unique_parseable_dates": 33,
+  "rows_with_invalid_ndvi_outside_minus1_to_1": 0,
+  "rows_with_unparseable_date_excluded": 0,
+  "field_date_duplicate_check": "passed; no duplicate field-date keys",
+  "geographic_split_field_counts": {
+    "test": 5,
+    "train": 9,
+    "validation": 6
+  },
+  "geographic_split_row_counts": {
+    "test": 157,
+    "train": 275,
+    "validation": 183
+  },
+  "expected_reference_counts": {
+    "field_date_rows": 615,
+    "audited_fields": 20,
+    "observation_dates": 33
+  },
+  "reference_count_checks": {
+    "rows_match_615": true,
+    "fields_match_20": true,
+    "dates_match_33": true
+  },
+  "ndvi_source_column": "ndvi_mean",
+  "date_source_column": "date",
+  "field_source_column": "field_id",
+  "split_source_column": "field_split",
+  "optional_lagged_context_features": [
+    "__lag1_ndmi",
+    "__lag1_dust",
+    "__lag1_soil_moisture"
+  ],
+  "latitude_source_column": "field_latitude_wgs84",
+  "longitude_source_column": "field_longitude_wgs84",
+  "spatial_alert_export": {
+    "output_file": "/workspace/scratch/c0403863d728/work/AgriLens_GitHub_Ready_FINAL/output/notebook_run/agrilens_spatial_alerts.geojson",
+    "coordinate_reference": "WGS84 longitude/latitude in decimal degrees (GeoJSON RFC 7946)",
+    "alert_rows_available": 16,
+    "feature_count": 16,
+    "rows_omitted_missing_or_invalid_coordinates": 0,
+    "latitude_column": "field_latitude_wgs84",
+    "longitude_column": "field_longitude_wgs84",
+    "status": "written"
+  },
+  "quality_screened_spatial_alert_export": {
+    "output_file": "/workspace/scratch/c0403863d728/work/AgriLens_GitHub_Ready_FINAL/output/notebook_run/agrilens_screened_spatial_alerts.geojson",
+    "coordinate_reference": "WGS84 longitude/latitude in decimal degrees (GeoJSON RFC 7946)",
+    "alert_rows_available": 11,
+    "feature_count": 11,
+    "rows_omitted_missing_or_invalid_coordinates": 0,
+    "latitude_column": "field_latitude_wgs84",
+    "longitude_column": "field_longitude_wgs84",
+    "status": "written"
+  },
+  "audited_coordinate_reference": {
+    "status": "joined_audited_wgs84_field_centroids",
+    "source_file": "/workspace/scratch/c0403863d728/work/AgriLens_GitHub_Ready_FINAL/validation/results/field_geography.csv",
+    "source_sha256": "cfb622355794bc977c7a27d319def6eeb936384f62acc97577b72cee5630e3ff",
+    "matched_fields": 20,
+    "crs_assumption": "Audited field_geography.csv uses WGS84 lat/lon in decimal degrees; inspect upstream provenance if uncertain."
+  },
+  "scene_quality_overlay": {
+    "scene_qa_source": "/workspace/scratch/c0403863d728/work/AgriLens_GitHub_Ready_FINAL/validation/results/date_scene_QA.csv",
+    "suspect_dates": [
+      "2025-05-17"
+    ],
+    "held_raw_alerts": 5,
+    "retrospective_overlay": true,
+    "scene_qa_sha256": "7c9dd4ba03ccb0a509e93afc032071b5845dcef22c981ad1bd2a8762becba803",
+    "raw_statistical_flags": 16,
+    "quality_screened_review_candidates": 11
+  },
+  "modelled_field_date_rows": 595,
+  "training_oof_residual_rows": 266,
+  "training_oof_field_count": 9,
+  "source_data_modified": false
+}

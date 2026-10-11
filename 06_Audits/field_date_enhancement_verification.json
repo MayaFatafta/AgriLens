@@ -1,0 +1,90 @@
+{
+  "status": "PASS_REAL_OBSERVATIONS_ENRICHED_NO_SYNTHETIC_DATA",
+  "row_unit": "One geographic field on one Sentinel-2 observation date",
+  "existing_fields": 20,
+  "existing_field_date_rows": 615,
+  "unique_observation_dates": 33,
+  "source_base_columns": 54,
+  "base_additive_columns": 57,
+  "QA_gated_columns": 63,
+  "new_v2_features": [
+    "v2_ndvi_slope3_total",
+    "v2_ndvi_dev_from_prev5_median",
+    "v2_cusum_neg"
+  ],
+  "new_QA_gated_features": [
+    "qa_ndvi_slope3_total",
+    "qa_ndvi_dev_from_prev5_median",
+    "qa_cusum_neg_reset"
+  ],
+  "quality_assurance": "Require current/past valid observations and consecutive gaps <=15 days for QA features; CUSUM resets on gaps or invalid pairs.",
+  "original_base_columns_exactly_preserved": true,
+  "field_date_keys_and_split_preserved": true,
+  "synthetic_records_joined": 0,
+  "independently_verified_dust_drought_damage_labels": 0,
+  "forecasting_or_dust_drought_classification_accuracy_claim": null,
+  "dates_vs_pixel_dataset": "33 field-table dates; separate reported pixel-level 34 dates not reconciled here",
+  "per_split": [
+    {
+      "field_split": "test",
+      "field_date_rows": 157,
+      "unique_fields": 5
+    },
+    {
+      "field_split": "train",
+      "field_date_rows": 275,
+      "unique_fields": 9
+    },
+    {
+      "field_split": "validation",
+      "field_date_rows": 183,
+      "unique_fields": 6
+    }
+  ],
+  "feature_nonmissing_counts": {
+    "v2_ndvi_slope3_total": {
+      "nonmissing_rows": 575,
+      "missing_rows": 40
+    },
+    "v2_ndvi_dev_from_prev5_median": {
+      "nonmissing_rows": 555,
+      "missing_rows": 60
+    },
+    "v2_cusum_neg": {
+      "nonmissing_rows": 615,
+      "missing_rows": 0
+    },
+    "qa_ndvi_slope3_total": {
+      "nonmissing_rows": 575,
+      "missing_rows": 40
+    },
+    "qa_ndvi_dev_from_prev5_median": {
+      "nonmissing_rows": 555,
+      "missing_rows": 60
+    },
+    "qa_cusum_neg_reset": {
+      "nonmissing_rows": 595,
+      "missing_rows": 20
+    }
+  },
+  "EMIT": {
+    "eligible_fields": 20,
+    "usable_fields": 14,
+    "complete_field_wavelength_rows": 3248,
+    "date": "2025-06-15",
+    "separate_one-date_layer": true
+  },
+  "input_source_sha256": {
+    "original_manual_screening": "ef87db4a308f4475f95ae265e88275a4dfb344770ab34d4d303ba0a388bafa31",
+    "v2_real_tidy": "8653d566311229ce86e007089602efffb2b9c05a877436e51f60aac9ceeb66b6",
+    "frozen_EMIT_archive": "51da38db380f9a23280b96a491445c362232fc81b4abaaf717786e89bbecd9e5"
+  },
+  "limitations": [
+    "Original dust, moisture, and meteorology measurements may be regional rather than field-specific.",
+    "No causal dust-versus-drought crop-damage labels are present or inferred.",
+    "Temporal pattern descriptors in NOT_FOR_MODEL table may use future dates.",
+    "QA-gated features remain exploratory; negative CUSUM detects decline shapes, not causes.",
+    "Six EMIT training fields remain masked; geographic selection bias is unresolved.",
+    "EMIT spectral observations are single-date; never treat them as a 615-row HSI time series."
+  ]
+}

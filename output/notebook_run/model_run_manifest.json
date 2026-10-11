@@ -1,0 +1,160 @@
+{
+  "project": "AgriLens — Dust or Drought?",
+  "task": "NDVI forecasting baseline comparison and residual anomaly screening",
+  "script_version": "1.2.0",
+  "run_utc": "2026-10-11T16:53:44.836779+00:00",
+  "input_file": "/workspace/scratch/c0403863d728/work/AgriLens_GitHub_Ready_FINAL/validation/data/agrilens_real_field_date_QA_gated_615.csv",
+  "input_sha256": "5919ffbdc2b33b6f3b3fd9c31f534889d80b2aa80cce4ceed1f04192a21c30c6",
+  "output_directory": "/workspace/scratch/c0403863d728/work/AgriLens_GitHub_Ready_FINAL/output/notebook_run",
+  "selected_forecaster_from_validation": "ridge",
+  "ridge_alpha_selected_from_validation": 1.0,
+  "ridge_alpha_candidates": [
+    {
+      "alpha": 0.1,
+      "validation_mae": 0.03084557388806683
+    },
+    {
+      "alpha": 1.0,
+      "validation_mae": 0.030786967908905456
+    },
+    {
+      "alpha": 10.0,
+      "validation_mae": 0.03083593915850441
+    },
+    {
+      "alpha": 100.0,
+      "validation_mae": 0.033199750132635195
+    }
+  ],
+  "validation_persistence_mae": 0.030996198079096045,
+  "validation_selected_ridge_mae": 0.030786967908905456,
+  "features_used": [
+    "__lag1",
+    "__lag2",
+    "__previous_delta",
+    "__delta_3obs",
+    "__days_since_prev",
+    "__doy_sin",
+    "__doy_cos",
+    "__lag1_ndmi",
+    "__lag1_dust",
+    "__lag1_soil_moisture"
+  ],
+  "anomaly_calibration": {
+    "n_training_oof_residuals": 266,
+    "residual_median": -0.00023445569351057682,
+    "residual_mad": 0.02472288428146288,
+    "robust_sigma": 0.03665414823569687,
+    "residual_q05": -0.06863304900887515,
+    "unconstrained_lower_tail_threshold": -0.09186982628275275,
+    "lower_anomaly_threshold": -0.09186982628275275,
+    "method": "minimum of training OOF residual 5th percentile and median - 2.5 robust sigmas",
+    "alerts_require_negative_residual": true,
+    "calibration_split": "train",
+    "calibration_predictions": "field-group out-of-fold",
+    "n_training_fields": 9,
+    "n_oof_folds": 5
+  },
+  "training_oof_calibration_output": "/workspace/scratch/c0403863d728/work/AgriLens_GitHub_Ready_FINAL/output/notebook_run/threshold_calibration_residuals.csv",
+  "training_oof_fold_method": "deterministic GroupKFold over training fields only; no shuffling",
+  "spatial_alerts_geojson": "/workspace/scratch/c0403863d728/work/AgriLens_GitHub_Ready_FINAL/output/notebook_run/agrilens_spatial_alerts.geojson",
+  "quality_screened_spatial_alerts_geojson": "/workspace/scratch/c0403863d728/work/AgriLens_GitHub_Ready_FINAL/output/notebook_run/agrilens_screened_spatial_alerts.geojson",
+  "scene_quality_overlay": {
+    "scene_qa_source": "/workspace/scratch/c0403863d728/work/AgriLens_GitHub_Ready_FINAL/validation/results/date_scene_QA.csv",
+    "suspect_dates": [
+      "2025-05-17"
+    ],
+    "held_raw_alerts": 5,
+    "retrospective_overlay": true,
+    "scene_qa_sha256": "7c9dd4ba03ccb0a509e93afc032071b5845dcef22c981ad1bd2a8762becba803",
+    "raw_statistical_flags": 16,
+    "quality_screened_review_candidates": 11
+  },
+  "audited_coordinate_reference": {
+    "status": "joined_audited_wgs84_field_centroids",
+    "source_file": "/workspace/scratch/c0403863d728/work/AgriLens_GitHub_Ready_FINAL/validation/results/field_geography.csv",
+    "source_sha256": "cfb622355794bc977c7a27d319def6eeb936384f62acc97577b72cee5630e3ff",
+    "matched_fields": 20,
+    "crs_assumption": "Audited field_geography.csv uses WGS84 lat/lon in decimal degrees; inspect upstream provenance if uncertain."
+  },
+  "spatial_alert_export": {
+    "output_file": "/workspace/scratch/c0403863d728/work/AgriLens_GitHub_Ready_FINAL/output/notebook_run/agrilens_spatial_alerts.geojson",
+    "coordinate_reference": "WGS84 longitude/latitude in decimal degrees (GeoJSON RFC 7946)",
+    "alert_rows_available": 16,
+    "feature_count": 16,
+    "rows_omitted_missing_or_invalid_coordinates": 0,
+    "latitude_column": "field_latitude_wgs84",
+    "longitude_column": "field_longitude_wgs84",
+    "status": "written"
+  },
+  "quality_screened_spatial_alert_export": {
+    "output_file": "/workspace/scratch/c0403863d728/work/AgriLens_GitHub_Ready_FINAL/output/notebook_run/agrilens_screened_spatial_alerts.geojson",
+    "coordinate_reference": "WGS84 longitude/latitude in decimal degrees (GeoJSON RFC 7946)",
+    "alert_rows_available": 11,
+    "feature_count": 11,
+    "rows_omitted_missing_or_invalid_coordinates": 0,
+    "latitude_column": "field_latitude_wgs84",
+    "longitude_column": "field_longitude_wgs84",
+    "status": "written"
+  },
+  "training_gap_95th_percentile_days": 12.0,
+  "test_metrics": [
+    {
+      "split": "test_holdout",
+      "model": "Persistence",
+      "n_pairs": 152,
+      "n_fields": 5,
+      "mae": 0.02957457171052632,
+      "rmse": 0.043602157186782495,
+      "bias_observed_minus_predicted": -0.0015794246052631578
+    },
+    {
+      "split": "test_holdout",
+      "model": "Ridge(alpha=1.0)",
+      "n_pairs": 152,
+      "n_fields": 5,
+      "mae": 0.031036030992421887,
+      "rmse": 0.04037584200327075,
+      "bias_observed_minus_predicted": -0.011370053146626013
+    },
+    {
+      "split": "test_holdout",
+      "model": "Selected(ridge)",
+      "n_pairs": 152,
+      "n_fields": 5,
+      "mae": 0.031036030992421887,
+      "rmse": 0.04037584200327075,
+      "bias_observed_minus_predicted": -0.011370053146626013
+    }
+  ],
+  "validation_metrics": [
+    {
+      "split": "validation",
+      "model": "Persistence",
+      "n_pairs": 177,
+      "n_fields": 6,
+      "mae": 0.030996198079096045,
+      "rmse": 0.04650102608831047,
+      "bias_observed_minus_predicted": -0.0021717258757062144
+    },
+    {
+      "split": "validation",
+      "model": "Ridge(alpha=1.0)",
+      "n_pairs": 177,
+      "n_fields": 6,
+      "mae": 0.030786967908905456,
+      "rmse": 0.041417708290396794,
+      "bias_observed_minus_predicted": -0.008615405492623998
+    },
+    {
+      "split": "validation",
+      "model": "Selected(ridge)",
+      "n_pairs": 177,
+      "n_fields": 6,
+      "mae": 0.030786967908905456,
+      "rmse": 0.041417708290396794,
+      "bias_observed_minus_predicted": -0.008615405492623998
+    }
+  ],
+  "interpretation_guardrail": "No damage labels; these are statistical anomaly alerts, not verified dust/drought diagnoses."
+}

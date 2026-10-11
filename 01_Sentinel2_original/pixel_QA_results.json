@@ -1,0 +1,283 @@
+{
+  "status": "PARTIAL: input tables verified individually, not independent scientific validation",
+  "files": {
+    "observation_dates.csv": {
+      "rows": 34,
+      "columns": 1,
+      "column_names": [
+        "date"
+      ]
+    },
+    "daily_env.csv": {
+      "rows": 214,
+      "columns": 17,
+      "column_names": [
+        "date",
+        "t2m_c",
+        "precipitation",
+        "wind_speed_10m",
+        "wind_direction_10m",
+        "soil_moisture_28_to_100cm",
+        "dust",
+        "aerosol_optical_depth",
+        "u10",
+        "v10",
+        "wind_max_48h",
+        "dust_max_48h",
+        "aod_max_48h",
+        "precip_48h",
+        "wind_from_48h",
+        "sm_change_7d",
+        "sm_change_48h"
+      ]
+    },
+    "field_timeseries.csv": {
+      "rows": 982,
+      "columns": 7,
+      "column_names": [
+        "field_id",
+        "date",
+        "pixel_count",
+        "ndvi_mean",
+        "ndmi_mean",
+        "evi_mean",
+        "aot_s2_mean"
+      ]
+    },
+    "field_1665168_summary.csv": {
+      "rows": 34,
+      "columns": 6,
+      "column_names": [
+        "date",
+        "ndvi",
+        "ndmi",
+        "dust",
+        "soil_moisture",
+        "pixel_count"
+      ]
+    },
+    "dataset.parquet": {
+      "rows": 707580,
+      "columns": 37,
+      "column_names": [
+        "date",
+        "scene_datetime_utc",
+        "scene_id",
+        "pixel_id",
+        "x_utm",
+        "y_utm",
+        "scl",
+        "aot_s2",
+        "ndvi",
+        "ndmi",
+        "evi",
+        "block",
+        "d_ndvi",
+        "d_ndmi",
+        "d_evi",
+        "days_since_prev",
+        "aot_s2_delta",
+        "t2m_c",
+        "precipitation",
+        "wind_speed_10m",
+        "wind_direction_10m",
+        "soil_moisture_28_to_100cm",
+        "dust",
+        "aerosol_optical_depth",
+        "u10",
+        "v10",
+        "wind_max_48h",
+        "dust_max_48h",
+        "aod_max_48h",
+        "precip_48h",
+        "wind_from_48h",
+        "sm_change_7d",
+        "sm_change_48h",
+        "field_id",
+        "worldcover_2021_class",
+        "cropland_reference_2021",
+        "split"
+      ]
+    }
+  },
+  "checks": {
+    "observation_dates_unique": 34,
+    "environment_dates_unique": 214,
+    "satellite_dates_with_environment": 34,
+    "environment_missing_pct": {
+      "wind_max_48h": 0.467,
+      "dust_max_48h": 0.467,
+      "aod_max_48h": 0.467,
+      "precip_48h": 0.467,
+      "wind_from_48h": 0.467,
+      "sm_change_7d": 3.271,
+      "sm_change_48h": 0.935
+    },
+    "field_count": 31,
+    "duplicate_field_dates": 0,
+    "field_assigned_observation_count": 618463,
+    "largest_field_id": "1665168",
+    "largest_field_observation_fraction": 0.82236,
+    "field_candidates_by_coverage": [
+      {
+        "field_id": 1664899,
+        "dates": 32,
+        "min_pixels": 39,
+        "median_pixels": 43.0,
+        "ndvi_std": 0.1192
+      },
+      {
+        "field_id": 1664931,
+        "dates": 32,
+        "min_pixels": 151,
+        "median_pixels": 217.0,
+        "ndvi_std": 0.0564
+      },
+      {
+        "field_id": 1664847,
+        "dates": 32,
+        "min_pixels": 72,
+        "median_pixels": 118.0,
+        "ndvi_std": 0.0653
+      },
+      {
+        "field_id": 1664852,
+        "dates": 31,
+        "min_pixels": 17,
+        "median_pixels": 28.0,
+        "ndvi_std": 0.1001
+      },
+      {
+        "field_id": 1664893,
+        "dates": 31,
+        "min_pixels": 45,
+        "median_pixels": 79.0,
+        "ndvi_std": 0.0616
+      },
+      {
+        "field_id": 1664841,
+        "dates": 32,
+        "min_pixels": 20,
+        "median_pixels": 36.0,
+        "ndvi_std": 0.1468
+      },
+      {
+        "field_id": 1664833,
+        "dates": 31,
+        "min_pixels": 28,
+        "median_pixels": 53.0,
+        "ndvi_std": 0.0519
+      },
+      {
+        "field_id": 1664849,
+        "dates": 32,
+        "min_pixels": 31,
+        "median_pixels": 68.0,
+        "ndvi_std": 0.0435
+      },
+      {
+        "field_id": 1664845,
+        "dates": 32,
+        "min_pixels": 33,
+        "median_pixels": 79.0,
+        "ndvi_std": 0.0751
+      },
+      {
+        "field_id": 1664855,
+        "dates": 31,
+        "min_pixels": 21,
+        "median_pixels": 52.0,
+        "ndvi_std": 0.075
+      }
+    ],
+    "focus_all_dates_joined": true,
+    "focus_max_ndvi_difference": 0.0,
+    "focus_max_ndmi_difference": 0.0,
+    "focus_coverage_below_50pct": [
+      {
+        "date": "2025-03-06",
+        "pixels": 444,
+        "fraction_of_max": 0.0278
+      }
+    ],
+    "focus_max_valid_pixels": 15984,
+    "focus_area_if_20m_hectares": 639.36,
+    "missing_core_columns": [],
+    "missing_pct": {
+      "sm_change_7d": 0.0673,
+      "field_id": 12.5946
+    },
+    "ndvi_counts": {
+      "outside_-1_1": 0,
+      "nonfinite": 0,
+      "p01": 0.052259840071201324,
+      "p99": 0.8123381471633908
+    },
+    "ndmi_counts": {
+      "outside_-1_1": 0,
+      "nonfinite": 0,
+      "p01": -0.151620122641325,
+      "p99": 0.35736010223627046
+    },
+    "evi_counts": {
+      "outside_-1_1": 4,
+      "nonfinite": 0,
+      "p01": 0.05430276546627283,
+      "p99": 0.6640422868728637
+    },
+    "duplicate_pixel_date": 0,
+    "scene_utc_hour_range": [
+      8.583333333333334,
+      8.75
+    ],
+    "scene_utc_hour_mode": 8,
+    "train_test_overlapping_blocks": 0,
+    "train_test_overlapping_pixel_ids": 0,
+    "train_test_overlapping_fields_count": 15,
+    "train_test_overlapping_fields_examples": [
+      "1664797",
+      "1664803",
+      "1664845",
+      "1664847",
+      "1664849",
+      "1664850",
+      "1664853",
+      "1664855",
+      "1664858",
+      "1664867",
+      "1664893",
+      "1664899",
+      "1664931",
+      "1664933",
+      "1665168"
+    ],
+    "pixels_assigned_to_multiple_field_ids": 0,
+    "field_vs_cropland_2021": {
+      "False": {
+        "False": 50356,
+        "True": 329218
+      },
+      "True": {
+        "False": 38761,
+        "True": 289245
+      }
+    },
+    "field_summary_count_matches_table": true
+  },
+  "warnings": [
+    "Single field accounts for >50% of field-assigned observations; check polygon identity/geometry and sample balancing.",
+    "Focus field contains observations with <50% of maximum pixel coverage; flag or exclude from seasonal comparison.",
+    "Field IDs occur in both train and test; unsuitable for claims of generalization to unseen fields.",
+    "No screening_label in feature table: there is no dust/drought target for classification."
+  ],
+  "recommendations": [
+    "Verify AOI location and field geometries; 30.25E,30.63N is Egypt, not Jordan.",
+    "Validate FTW field 1665168 (~639 ha if 20 m) against imagery before calling it a single farm.",
+    "Do not treat WorldCover 2021 as a verified 2025 crop or stress label.",
+    "Check 2025-05-17 NDVI drop and 2025-05-20 rebound against RGB imagery, SCL and AOT; dust may impair observation rather than crops.",
+    "Check train/test field leakage before claiming independence, and use field-balanced aggregation.",
+    "Treat dust and ERA5 root-zone moisture as coarse contextual model products, not field measurements.",
+    "Document absence of independent dust/drought labels; do not report predictive accuracy as if labels were validated.",
+    "Include source IDs and attribution in provenance.json and capture the exact processing code revision."
+  ]
+}

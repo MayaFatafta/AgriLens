@@ -55,12 +55,12 @@ ALIASES: dict[str, list[str]] = {
         "ndvi_field_mean", "ndvi_field_median",
     ],
     "split": [
-        "split", "geo_split", "geographic_split", "spatial_split", "dataset_split",
+        "field_split", "geographic_split", "spatial_split", "geo_split", "split", "dataset_split",
         "data_split", "set", "subset", "split_name", "group_split", "partition",
     ],
     "ndmi": ["ndmi", "ndmi_mean", "mean_ndmi", "ndmi_median", "median_ndmi", "s2_ndmi"],
     "dust": ["dust", "dust_index", "dust_aod", "aod", "aerosol_optical_thickness", "modeled_dust", "modelled_dust", "dust_flag"],
-    "soil_moisture": ["soil_moisture", "soilmoisture", "sm", "modeled_soil_moisture", "modelled_soil_moisture", "soil_moisture_proxy"],
+    "soil_moisture": ["soil_moisture", "soilmoisture", "sm", "modeled_soil_moisture", "modelled_soil_moisture", "soil_moisture_proxy", "soil_moisture_28_to_100cm"],
     "latitude": ["latitude", "lat", "field_latitude", "field_lat", "centroid_latitude", "centroid_lat", "center_latitude", "center_lat", "y_lat"],
     "longitude": ["longitude", "lon", "lng", "long", "field_longitude", "field_lon", "centroid_longitude", "centroid_lon", "center_longitude", "center_lon", "x_lon"],
 }
@@ -94,7 +94,7 @@ def _find_column(df: pd.DataFrame, role: str, explicit: str | None = None, requi
         if candidates:
             return candidates[0]
     elif role == "split":
-        candidates = [c for c in df.columns if "split" in _norm(c) or "partition" in _norm(c)]
+        candidates = [c for c in df.columns if ("split" in _norm(c) or "partition" in _norm(c)) and not any(x in _norm(c) for x in ("historical", "recorded", "mismatch"))]
         if candidates:
             return candidates[0]
     elif role == "latitude":
@@ -254,59 +254,6 @@ def _normalize_split(value: Any) -> str | None:
     if re.search(r"(^|_)test(ing)?($|_)", s):
         return "test"
     return None
-
-
-AUDITED_SPLIT_COLUMN = "field_split"  # audited 9/6/5 geographic assignment; takes priority over any other split-like column
-
-
-def _select_split_column(df: pd.DataFrame, explicit: str | None) -> tuple[str | None, dict[str, Any]]:
-    """Choose the geographic split column without guessing between conflicting candidates.
-
-    Priority: (1) --split-col, (2) the audited ``field_split`` column, (3) the only
-    split-like column whose labels are all valid train/validation/test values.
-    Several valid candidates and no audited column -> error (never a silent pick).
-    """
-    info: dict[str, Any] = {"selection_rule": None, "candidate_columns": [], "ignored_columns": {}}
-    if explicit:
-        if explicit not in df.columns:
-            raise ValueError(f"Requested split column {explicit!r} not found. Available columns: {list(df.columns)}")
-        info["selection_rule"] = "explicit --split-col"
-        chosen = explicit
-    else:
-        valid: list[str] = []
-        for c in df.columns:
-            if "split" not in _norm(c) and _norm(c) not in ALIASES["split"]:
-                continue
-            vals = df[c].dropna()
-            if len(vals) and vals.map(_normalize_split).notna().all():
-                valid.append(c)
-        info["candidate_columns"] = valid
-        if AUDITED_SPLIT_COLUMN in df.columns:
-            if AUDITED_SPLIT_COLUMN not in valid:
-                raise ValueError(
-                    f"The audited split column {AUDITED_SPLIT_COLUMN!r} exists but contains missing or unrecognized labels. "
-                    "Fix the audited column; the script will not fall back to another split column."
-                )
-            info["selection_rule"] = f"audited column {AUDITED_SPLIT_COLUMN!r} has priority"
-            chosen = AUDITED_SPLIT_COLUMN
-        elif len(valid) == 1:
-            info["selection_rule"] = "single valid split-like column"
-            chosen = valid[0]
-        elif len(valid) > 1:
-            raise ValueError(
-                f"Ambiguous geographic split: several split-like columns {valid} and none is the audited "
-                f"{AUDITED_SPLIT_COLUMN!r} column. Pass --split-col explicitly instead of letting the script guess."
-            )
-        else:
-            return None, info
-    base = df[chosen].map(_normalize_split)
-    for c in info["candidate_columns"]:
-        if c == chosen:
-            continue
-        other = df[c].map(_normalize_split)
-        info["ignored_columns"][c] = {"rows_disagreeing_with_selected": int((other.notna() & (other != base)).sum())}
-    info["selected_column"] = chosen
-    return chosen, info
 
 
 def _find_split_map(repo_root: Path, input_path: Path) -> Path | None:
@@ -484,102 +431,12 @@ def _json_value(value: Any) -> Any:
     return str(value)
 
 
-SCENE_NOTE_KEYWORD = "high regional aot"
-
-
-def _load_scene_qa(path: Path) -> pd.DataFrame:
-    """Read Rama's per-date scene-quality table; return date (YYYY-MM-DD) and suspect flag.
-
-    A date is a suspected scene artefact when Rama's ``scene_qa_note`` carries the
-    high-regional-AOT warning (region-wide dip that rebounds). Without a note column,
-    the fallback rule is mean AOT >= 0.6 together with a regional drop of >= 0.05.
-    """
-    qa = _read_table(path)
-    date_col = _find_column(qa, "date", None)
-    out = pd.DataFrame({"__qa_date": _parse_dates(qa[date_col]).dt.strftime("%Y-%m-%d")})
-    norm = {_norm(c): c for c in qa.columns}
-    if "scene_qa_note" in norm:
-        note = qa[norm["scene_qa_note"]].fillna("").astype(str)
-        out["scene_artifact_suspect"] = note.str.lower().str.contains(SCENE_NOTE_KEYWORD, regex=False)
-        out["scene_qa_note"] = note
-    elif "mean_aot_s2" in norm and "regional_drop_vs_prev" in norm:
-        aot = pd.to_numeric(qa[norm["mean_aot_s2"]], errors="coerce")
-        drop = pd.to_numeric(qa[norm["regional_drop_vs_prev"]], errors="coerce")
-        out["scene_artifact_suspect"] = (aot >= 0.6) & (drop >= 0.05)
-        out["scene_qa_note"] = ""
-    else:
-        raise ValueError(f"Scene QA table {path} needs a 'scene_qa_note' column or 'mean_aot_s2' + 'regional_drop_vs_prev'.")
-    if out["__qa_date"].isna().any():
-        raise ValueError(f"Scene QA table {path} has unparseable dates.")
-    if out["__qa_date"].duplicated().any():
-        raise ValueError(f"Scene QA table {path} has duplicate dates.")
-    return out
-
-
-def _resolve_field_coordinates(
-    field_ids: pd.Series,
-    *,
-    source_df: pd.DataFrame,
-    field_col: str,
-    coords_path: Path | None,
-    latitude_col: str | None,
-    longitude_col: str | None,
-) -> tuple[pd.DataFrame, dict[str, Any]]:
-    """Return one verified WGS84 coordinate pair per field ID (or an explicit unmapped reason)."""
-    ids = pd.Series(sorted(set(field_ids.astype(str))), name="model_field_id")
-    if coords_path is not None:
-        tab = _read_table(coords_path)
-        f_c = _find_column(tab, "field", None)
-        la_c = _find_column(tab, "latitude", None)
-        lo_c = _find_column(tab, "longitude", None)
-        source_label = f"{coords_path.name} ({la_c}/{lo_c})"
-    elif latitude_col and longitude_col:
-        tab, f_c, la_c, lo_c = source_df, field_col, latitude_col, longitude_col
-        source_label = f"input table ({la_c}/{lo_c})"
-    else:
-        out = ids.to_frame()
-        out["map_latitude"] = np.nan
-        out["map_longitude"] = np.nan
-        out["coordinate_status"] = "unmapped_no_coordinate_source"
-        return out, {"status": "no_coordinate_source", "source": None}
-    t = pd.DataFrame({
-        "model_field_id": tab[f_c].astype(str).str.strip(),
-        "lat": pd.to_numeric(tab[la_c], errors="coerce"),
-        "lon": pd.to_numeric(tab[lo_c], errors="coerce"),
-    })
-    rows = []
-    for fid in ids:
-        g = t[t["model_field_id"] == fid]
-        if g.empty:
-            rows.append((fid, np.nan, np.nan, "unmapped_missing_field_in_coordinate_source")); continue
-        lat_u, lon_u = g["lat"].dropna().round(9).unique(), g["lon"].dropna().round(9).unique()
-        if len(lat_u) == 0 or len(lon_u) == 0:
-            rows.append((fid, np.nan, np.nan, "unmapped_missing_coordinates")); continue
-        if len(lat_u) > 1 or len(lon_u) > 1:
-            rows.append((fid, np.nan, np.nan, "unmapped_conflicting_coordinates")); continue
-        la, lo = float(lat_u[0]), float(lon_u[0])
-        if not (np.isfinite(la) and np.isfinite(lo)) or not (-90 <= la <= 90 and -180 <= lo <= 180):
-            rows.append((fid, np.nan, np.nan, "unmapped_not_valid_wgs84_range")); continue
-        if la == 0.0 and lo == 0.0:
-            rows.append((fid, np.nan, np.nan, "unmapped_null_island_placeholder")); continue
-        rows.append((fid, la, lo, "valid_wgs84"))
-    out = pd.DataFrame(rows, columns=["model_field_id", "map_latitude", "map_longitude", "coordinate_status"])
-    audit = {
-        "status": "resolved", "source": source_label,
-        "fields_with_valid_coordinates": int((out["coordinate_status"] == "valid_wgs84").sum()),
-        "fields_unmapped": out.loc[out["coordinate_status"] != "valid_wgs84", "model_field_id"].tolist(),
-        "unmapped_reasons": out.loc[out["coordinate_status"] != "valid_wgs84"].set_index("model_field_id")["coordinate_status"].to_dict(),
-    }
-    return out, audit
-
-
 def _write_spatial_alerts_geojson(
     results: pd.DataFrame,
     output_path: Path,
     *,
     latitude_col: str | None,
     longitude_col: str | None,
-    coordinate_source: str | None = None,
 ) -> dict[str, Any]:
     """Write RFC 7946-style GeoJSON Point features for flagged rows only.
 
@@ -618,14 +475,14 @@ def _write_spatial_alerts_geojson(
         "model_field_id", "model_observation_date", "model_split", "observed_ndvi", "expected_ndvi",
         "residual_observed_minus_expected", "anomaly_threshold", "residual_robust_z", "alert_priority",
         "pattern_screen", "cause_interpretation", "alert_reason", "inspection_recommendation", "confidence_note",
-        "selected_model", "days_since_previous_observation",
-        "review_category", "scene_artifact_suspect", "quality_screened_flag", "scene_qa_status",
+        "selected_model", "days_since_previous_observation", "model_method", "source_run",
+        "scene_qa_status", "scene_qa_evidence", "operational_review_candidate",
     ]
     for pos, (_, row) in enumerate(valid_alerts.iterrows()):
         properties = {key: _json_value(row[key]) for key in properties_candidates if key in valid_alerts.columns}
         properties["latitude"] = float(valid_lats[pos])
         properties["longitude"] = float(valid_lons[pos])
-        properties["coordinate_source"] = coordinate_source or {"latitude": latitude_col, "longitude": longitude_col}
+        properties["source_coordinate_columns"] = {"latitude": latitude_col, "longitude": longitude_col}
         field_id = str(row.get("model_field_id", "unknown-field"))
         obs_date = _json_value(row.get("model_observation_date"))
         feature: dict[str, Any] = {
@@ -644,6 +501,95 @@ def _write_spatial_alerts_geojson(
     return base_audit
 
 
+def _apply_scene_qa(scored: pd.DataFrame, scene_qa_path: str | None) -> tuple[pd.DataFrame, dict[str, Any]]:
+    """Label flags associated with independently audited *suspected* scene effects.
+
+    This is a retrospective quality-review overlay, not an operational causal
+    detection rule. Original statistical flags remain unchanged.
+    """
+    out = scored.copy()
+    out["model_method"] = "one_step_ndvi_forecast_lower_tail_residual"
+    out["source_run"] = f"rand_model_v{SCRIPT_VERSION}"
+    out["scene_qa_status"] = "not_supplied" if not scene_qa_path else "not_flagged_by_scene_qa"
+    out["scene_qa_evidence"] = ""
+    flagged = out["anomaly_flag"].fillna(False).astype(bool)
+    audit = {"scene_qa_source": None, "suspect_dates": [], "held_raw_alerts": 0, "retrospective_overlay": bool(scene_qa_path)}
+    if scene_qa_path:
+        path = Path(scene_qa_path).expanduser().resolve()
+        if not path.is_file():
+            raise FileNotFoundError(f"Scene QA reference missing: {path}")
+        qa = pd.read_csv(path)
+        if not {"date", "scene_qa_note"}.issubset(qa.columns):
+            raise ValueError("Scene QA CSV must include date and scene_qa_note columns.")
+        qa["__day"] = _parse_dates(qa["date"]).dt.strftime("%Y-%m-%d")
+        if qa["__day"].isna().any() or qa["__day"].duplicated().any():
+            raise ValueError("Scene QA reference must contain unique, valid dates.")
+        suspicious = qa[qa["scene_qa_note"].notna() & qa["scene_qa_note"].astype(str).str.strip().ne("")]
+        suspect_days = set(suspicious["__day"].tolist())
+        audit["scene_qa_source"] = str(path)
+        audit["scene_qa_sha256"] = _sha256(path)
+        audit["suspect_dates"] = sorted(suspect_days)
+        notes = dict(zip(suspicious["__day"], suspicious["scene_qa_note"].astype(str)))
+        day = out["__date"].dt.strftime("%Y-%m-%d")
+        scene_mask = day.isin(suspect_days)
+        out.loc[scene_mask, "scene_qa_status"] = "suspected_scene_artifact"
+        out.loc[scene_mask, "scene_qa_evidence"] = day.loc[scene_mask].map(notes).fillna("")
+        suspect_flags = flagged & scene_mask
+        audit["held_raw_alerts"] = int(suspect_flags.sum())
+        out.loc[suspect_flags, "alert_priority"] = "Scene QA hold"
+        out.loc[suspect_flags, "inspection_recommendation"] = (
+            "Suspected atmospheric/image-quality scene effect: inspect imagery and source QA first; "
+            "do not treat this satellite observation alone as evidence requiring a crop-field visit."
+        )
+    out["operational_review_candidate"] = flagged & out["scene_qa_status"].ne("suspected_scene_artifact")
+    audit["raw_statistical_flags"] = int(flagged.sum())
+    audit["quality_screened_review_candidates"] = int(out["operational_review_candidate"].sum())
+    return out, audit
+
+
+def _attach_audited_coordinates(
+    results: pd.DataFrame, reference: str | None
+) -> tuple[pd.DataFrame, str | None, str | None, dict[str, Any]]:
+    """Join explicitly supplied audited WGS84 field centroids, failing closed."""
+    if not reference:
+        return results, None, None, {"status": "not_supplied"}
+    path = Path(reference).expanduser().resolve()
+    if not path.is_file():
+        raise FileNotFoundError(f"Audited field geography CSV missing: {path}")
+    df = pd.read_csv(path)
+    mandatory = {"field_id", "lat", "lon", "split"}
+    if not mandatory.issubset(df.columns):
+        raise ValueError(f"Audited geography CSV must include {sorted(mandatory)} (WGS84 decimal degrees).")
+    df["__field_key"] = df["field_id"].astype(str).str.strip()
+    if df["__field_key"].duplicated().any() or df["__field_key"].isna().any():
+        raise ValueError("Audited geography must contain exactly one coordinate pair per field.")
+    for c,lo,hi in (("lon",-180,180),("lat",-90,90)):
+        values = pd.to_numeric(df[c], errors="coerce")
+        if not (values.notna() & np.isfinite(values) & values.between(lo,hi)).all():
+            raise ValueError(f"Invalid {c} in audited WGS84 geography; no coordinates fabricated.")
+        df[c] = values
+    df["__geo_split"] = df["split"].map(_normalize_split)
+    if df["__geo_split"].isna().any():
+        raise ValueError("Unknown geographic split in audited geography CSV.")
+    unique_results = results[["model_field_id", "model_split"]].drop_duplicates()
+    unique_results["__field_key"] = unique_results["model_field_id"].astype(str).str.strip()
+    matches = unique_results.merge(df[["__field_key", "__geo_split"]], on="__field_key",how="left",validate="one_to_one")
+    if matches["__geo_split"].isna().any() or (matches["model_split"] != matches["__geo_split"]).any():
+        raise ValueError("Audited field geography missing fields or disagrees with required geographic splits.")
+    if len(matches) != len(df):
+        raise ValueError("Audited coordinate reference field count does not match model field count.")
+    geo = df.set_index("__field_key")
+    joined = results.copy()
+    keys = joined["model_field_id"].astype(str).str.strip()
+    joined["field_latitude_wgs84"] = keys.map(geo["lat"]).astype(float)
+    joined["field_longitude_wgs84"] = keys.map(geo["lon"]).astype(float)
+    return joined, "field_latitude_wgs84", "field_longitude_wgs84", {
+        "status": "joined_audited_wgs84_field_centroids", "source_file": str(path),
+        "source_sha256": _sha256(path), "matched_fields": int(len(matches)),
+        "crs_assumption": "Audited field_geography.csv uses WGS84 lat/lon in decimal degrees; inspect upstream provenance if uncertain.",
+    }
+
+
 def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
     repo_root = Path(args.repo_root).expanduser().resolve()
     if args.input == "auto":
@@ -659,7 +605,7 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
     field_col = _find_column(df_raw, "field", args.field_col)
     date_col = _find_column(df_raw, "date", args.date_col)
     ndvi_col = _find_column(df_raw, "ndvi", args.ndvi_col)
-    split_col, split_selection = _select_split_column(df_raw, args.split_col)
+    split_col = _find_column(df_raw, "split", args.split_col, required=False)
 
     df = df_raw.copy().reset_index(drop=True)
     df["__source_row"] = np.arange(len(df), dtype=int)
@@ -866,8 +812,8 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
 
     scored["alert_reason"] = "Residual did not cross the training-calibrated lower threshold."
     scored.loc[flagged, "alert_reason"] = scored.loc[flagged].apply(
-        lambda r: (f"Observed NDVI is {_fmt(r['residual_observed_minus_expected'], 3)} below its expected value "
-                   f"(residual {_fmt(r['residual_observed_minus_expected'], 3)}; threshold {_fmt(threshold, 3)})."), axis=1
+        lambda r: (f"Observed NDVI is {abs(float(r['residual_observed_minus_expected'])):.3f} below expected "
+                   f"(signed residual {_fmt(r['residual_observed_minus_expected'], 3)}; threshold {_fmt(threshold, 3)})."), axis=1
     )
 
     scored["inspection_recommendation"] = (
@@ -875,39 +821,6 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
     )
     scored.loc[flagged, "inspection_recommendation"] = (
         "Review crop condition and image quality; verify irrigation records and root-zone moisture before changing water delivery."
-    )
-
-    # Image-quality screen: keep the RAW model flag and add a quality-screened view.
-    scored["raw_anomaly_flag"] = flagged
-    scored["scene_qa_status"] = "not_assessed"
-    scored["scene_artifact_suspect"] = False
-    scene_qa_path = getattr(args, "scene_qa", None)
-    scene_qa_audit: dict[str, Any] = {"status": "not_provided"}
-    if scene_qa_path:
-        qa_path = Path(scene_qa_path).expanduser().resolve()
-        if not qa_path.exists():
-            raise FileNotFoundError(f"Scene QA file does not exist: {qa_path}")
-        qa = _load_scene_qa(qa_path)
-        date_key = scored["__date"].dt.strftime("%Y-%m-%d")
-        suspect_dates = set(qa.loc[qa["scene_artifact_suspect"], "__qa_date"])
-        known_dates = set(qa["__qa_date"])
-        scored["scene_qa_status"] = np.where(date_key.isin(suspect_dates), "suspected_scene_artefact",
-                                             np.where(date_key.isin(known_dates), "no_scene_warning", "date_not_in_scene_qa"))
-        scored["scene_artifact_suspect"] = flagged & date_key.isin(suspect_dates)
-        scene_qa_audit = {
-            "status": "applied", "file": str(qa_path), "rule": f"scene_qa_note contains '{SCENE_NOTE_KEYWORD}' (fallback: AOT>=0.6 and regional drop>=0.05)",
-            "suspect_dates": sorted(suspect_dates),
-            "flagged_dates_missing_from_scene_qa": sorted(set(date_key[flagged]) - known_dates),
-        }
-    scene_flag = scored["scene_artifact_suspect"].astype(bool)
-    scored["quality_screened_flag"] = flagged & ~scene_flag
-    scored["review_category"] = "No alert"
-    scored.loc[flagged & ~scene_flag, "review_category"] = "Negative NDVI anomaly - review candidate"
-    scored.loc[scene_flag, "review_category"] = "Suspected scene artefact - image review"
-    scored.loc[scene_flag, "alert_priority"] = "Image review (suspected scene artefact)"
-    scored.loc[scene_flag, "cause_interpretation"] = "Undetermined; suspected scene/atmospheric artefact - verify imagery before any crop inspection"
-    scored.loc[scene_flag, "inspection_recommendation"] = (
-        "Check the satellite image first (high regional aerosol load on this date); not a crop-inspection alert unless the dip persists in a clean scene."
     )
 
     # Long acquisition gaps are disclosed as lower-confidence context.
@@ -921,6 +834,8 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
         scored["long_observation_gap"] = False
         scored["confidence_note"] = "Gap confidence unavailable"
 
+    scored, scene_qa_audit = _apply_scene_qa(scored, getattr(args, "scene_qa", None))
+
     # Preserve original source values and add outputs. No source rows are overwritten.
     source_cols = [c for c in df_raw.columns if c not in {"__source_row"}]
     source_lookup = df.set_index("__source_row", drop=False)
@@ -932,8 +847,8 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
         "pred_persistence", "pred_ridge", "selected_model", "expected_ndvi", "residual_observed_minus_expected",
         "anomaly_threshold", "ndvi_change_from_previous", "residual_robust_z", "anomaly_flag", "negative_changes_last_3",
         "training_oof_fold",
-        "raw_anomaly_flag", "scene_qa_status", "scene_artifact_suspect", "quality_screened_flag", "review_category",
         "pattern_screen", "cause_interpretation", "alert_priority", "alert_reason", "inspection_recommendation", "long_observation_gap", "confidence_note",
+        "model_method", "source_run", "scene_qa_status", "scene_qa_evidence", "operational_review_candidate",
     ]
     keep_derived = [c for c in derived_cols if c in scored.columns]
     results = pd.concat([original_for_scored, scored[keep_derived].reset_index(drop=True)], axis=1)
@@ -982,11 +897,21 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
     figures_dir = output_dir / "figures"
     figures_dir.mkdir(parents=True, exist_ok=True)
 
+    results, audited_lat, audited_lon, coordinate_audit = _attach_audited_coordinates(
+        results, getattr(args, "coordinate_reference", None)
+    )
     results.to_csv(output_dir / "field_date_ndvi_anomaly_results.csv", index=False)
-    results[results["anomaly_flag"].fillna(False)].to_csv(output_dir / "all_split_anomaly_flags.csv", index=False)  # RAW model flags
+    results[results["anomaly_flag"].fillna(False)].to_csv(output_dir / "all_split_anomaly_flags.csv", index=False)
     test_alerts.to_csv(output_dir / "heldout_test_alerts.csv", index=False)
     field_summary.to_csv(output_dir / "field_summary.csv", index=False)
     metrics_df.to_csv(output_dir / "forecast_metrics.csv", index=False)
+
+    results[results["operational_review_candidate"].astype(bool)].to_csv(
+        output_dir / "quality_screened_inspection_queue.csv", index=False
+    )
+    results[results["anomaly_flag"].astype(bool) & (results["scene_qa_status"] == "suspected_scene_artifact")].to_csv(
+        output_dir / "scene_qa_held_alerts.csv", index=False
+    )
 
     # Export the actual residuals used for threshold calibration. This provides a
     # compact audit trail that every threshold residual came from a training-field
@@ -1000,35 +925,22 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
     })
     calibration_table.to_csv(output_dir / "threshold_calibration_residuals.csv", index=False)
 
-    queue_cols_first = ["model_field_id", "model_observation_date", "model_split", "observed_ndvi", "expected_ndvi",
-                        "residual_observed_minus_expected", "review_category", "scene_qa_status", "alert_priority"]
-    screened = results[results["quality_screened_flag"].astype(bool)].sort_values("residual_observed_minus_expected")
-    suspects = results[results["scene_artifact_suspect"].astype(bool)].sort_values("residual_observed_minus_expected")
-    for frame, name in ((screened, "quality_screened_review_queue.csv"), (suspects, "scene_artifact_suspects.csv")):
-        keep = [c for c in queue_cols_first if c in frame.columns] + [c for c in frame.columns if c not in queue_cols_first]
-        frame[keep].to_csv(output_dir / name, index=False)
-
     latitude_col = _find_column(df_raw, "latitude", getattr(args, "latitude_col", None), required=False)
     longitude_col = _find_column(df_raw, "longitude", getattr(args, "longitude_col", None), required=False)
-    coords_arg = getattr(args, "field_coords", None)
-    coords_path = Path(coords_arg).expanduser().resolve() if coords_arg else None
-    if coords_path is not None and not coords_path.exists():
-        raise FileNotFoundError(f"Field coordinate file does not exist: {coords_path}")
-    coord_table, coord_audit = _resolve_field_coordinates(
-        results["model_field_id"], source_df=df_raw.rename(columns={field_col: field_col}), field_col=field_col,
-        coords_path=coords_path, latitude_col=latitude_col, longitude_col=longitude_col,
-    )
-    results = results.merge(coord_table, on="model_field_id", how="left", validate="many_to_one")
-    results.to_csv(output_dir / "field_date_ndvi_anomaly_results.csv", index=False)  # rewrite with map columns
-    has_source = coord_audit["status"] != "no_coordinate_source"
+    latitude_col = audited_lat or latitude_col
+    longitude_col = audited_lon or longitude_col
     geojson_audit = _write_spatial_alerts_geojson(
         results,
         output_dir / "agrilens_spatial_alerts.geojson",
-        latitude_col="map_latitude" if has_source else None,
-        longitude_col="map_longitude" if has_source else None,
-        coordinate_source=coord_audit.get("source"),
+        latitude_col=latitude_col,
+        longitude_col=longitude_col,
     )
-    geojson_audit["field_coordinate_resolution"] = coord_audit
+
+    screened_geojson_audit = _write_spatial_alerts_geojson(
+        results[results["operational_review_candidate"].astype(bool)].copy(),
+        output_dir / "agrilens_screened_spatial_alerts.geojson",
+        latitude_col=latitude_col, longitude_col=longitude_col,
+    )
 
     # Data audit and reproducibility metadata.
     split_field_counts = df.groupby("__split")["__field"].nunique().to_dict()
@@ -1058,14 +970,13 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
         "date_source_column": date_col,
         "field_source_column": field_col,
         "split_source_column": split_col,
-        "split_selection": split_selection,
         "optional_lagged_context_features": optional_features,
         "latitude_source_column": latitude_col,
         "longitude_source_column": longitude_col,
         "spatial_alert_export": geojson_audit,
-        "scene_quality_screen": {**scene_qa_audit, "raw_flags": int(results["raw_anomaly_flag"].sum()),
-                                  "quality_screened_flags": int(results["quality_screened_flag"].sum()),
-                                  "suspected_scene_artefact_flags": int(results["scene_artifact_suspect"].sum())},
+        "quality_screened_spatial_alert_export": screened_geojson_audit,
+        "audited_coordinate_reference": coordinate_audit,
+        "scene_quality_overlay": scene_qa_audit,
         "modelled_field_date_rows": int(len(results)),
         "training_oof_residual_rows": int(len(calibration_table)),
         "training_oof_field_count": int(calibration_table["field_id"].nunique()),
@@ -1094,7 +1005,13 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
         "training_oof_calibration_output": str(output_dir / "threshold_calibration_residuals.csv"),
         "training_oof_fold_method": "deterministic GroupKFold over training fields only; no shuffling",
         "spatial_alerts_geojson": str(output_dir / "agrilens_spatial_alerts.geojson"),
+        "quality_screened_spatial_alerts_geojson": str(output_dir / "agrilens_screened_spatial_alerts.geojson"),
+        "scene_quality_overlay": scene_qa_audit,
+        "audited_coordinate_reference": coordinate_audit,
         "spatial_alert_export": geojson_audit,
+        "quality_screened_spatial_alert_export": screened_geojson_audit,
+        "audited_coordinate_reference": coordinate_audit,
+        "scene_quality_overlay": scene_qa_audit,
         "training_gap_95th_percentile_days": gap_q95,
         "test_metrics": test_metrics,
         "validation_metrics": validation_metrics,
@@ -1157,7 +1074,7 @@ def run_analysis(args: argparse.Namespace) -> dict[str, Any]:
 
     report = _build_report(audit, manifest, metrics_df, scored, threshold_info, output_dir)
     (output_dir / "MODELING_REPORT.md").write_text(report, encoding="utf-8")
-    return {"input_path": str(input_path), "output_dir": str(output_dir), "audit": audit, "manifest": manifest, "metrics": metrics_df.to_dict(orient="records"), "alert_count_test": int(len(test_alerts))}
+    return {"input_path": str(input_path), "output_dir": str(output_dir), "audit": audit, "manifest": manifest, "metrics": metrics_df.to_dict(orient="records"), "alert_count_test": int(len(test_alerts)), "scene_qa_audit": scene_qa_audit}
 
 
 def _fmt(v: Any, n: int = 5) -> str:
@@ -1180,6 +1097,12 @@ def _build_report(audit: dict[str, Any], manifest: dict[str, Any], metrics_df: p
     test_counts = {r["model"]: r["n_pairs"] for _, r in test_rows.iterrows()}
     alerts = scored[(scored["__split"] == "test") & scored["anomaly_flag"].fillna(False)]
     fields_flagged = sorted(alerts["__field"].astype(str).unique().tolist())
+    qa_overlay = audit["scene_quality_overlay"]
+    qa_note = (f"Retrospective scene QA source: `{qa_overlay['scene_qa_source']}`; "
+               f"{qa_overlay['held_raw_alerts']} raw model flags held for image review across all splits. "
+               f"{qa_overlay['quality_screened_review_candidates']} remain as quality-screened review candidates."
+               if qa_overlay.get("scene_qa_source") else
+               "No audited scene QA overlay supplied; operational review flags have not been screened for suspected scene artefacts.")
     try:
         metrics_table = metrics_df.to_markdown(index=False, floatfmt=".5f")
     except Exception:
@@ -1197,7 +1120,9 @@ This run compares a persistence forecast (next NDVI equals the previous valid ND
 **Selected forecast baseline:** `{manifest['selected_forecaster_from_validation']}`  
 **Selected Ridge alpha:** `{alpha}`  
 **Training-calibrated lower residual threshold:** `{_fmt(threshold_info['lower_anomaly_threshold'])}`  
-**Held-out test anomaly flags:** {len(alerts)} across {len(fields_flagged)} field(s).
+**Held-out test *raw* anomaly flags:** {len(alerts)} across {len(fields_flagged)} field(s).
+
+**Scene-quality integration:** {qa_note}
 
 These are **statistical vegetation-change alerts, not confirmed crop damage or dust/drought diagnoses**. No independent damage labels were supplied for this run.
 
@@ -1267,7 +1192,10 @@ The run wrote `{audit['spatial_alert_export']['output_file']}` with status `{aud
 - `data_audit.json` — counts, column mappings, split audit, and source hash.
 - `model_run_manifest.json` — run settings, selected model, threshold, and metrics.
 - `threshold_calibration_residuals.csv` — training-only OOF residuals used for threshold calibration.
-- `agrilens_spatial_alerts.geojson` — GeoJSON Point features for flagged rows with valid WGS84 latitude/longitude; empty when source coordinates are not available.
+- `agrilens_spatial_alerts.geojson` — **raw** statistical flags with explicit QA status and audited WGS84 points where available.
+- `quality_screened_inspection_queue.csv` — flagged observations excluding retrospective suspect-scene flags; not a verified damage set.
+- `scene_qa_held_alerts.csv` — retained model alerts with scene-quality hold notes.
+- `agrilens_screened_spatial_alerts.geojson` — only quality-screened review candidates with mapped audited centroids.
 - `figures/` — calibration and demonstration plots, when plotting dependencies are available.
 
 The source data is read-only; all derived artifacts are written to `{output_dir}`.
@@ -1289,10 +1217,10 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--ndmi-col", default=None, help="Optional NDMI column to add as a lagged predictor.")
     parser.add_argument("--dust-col", default=None, help="Optional modeled dust/context column to add as a lagged predictor.")
     parser.add_argument("--soil-moisture-col", default=None, help="Optional modeled soil-moisture column to add as a lagged predictor.")
+    parser.add_argument("--scene-qa", default=None, help="Rama's audited date_scene_QA.csv; applies a *retrospective*, suspect-scene overlay without changing raw statistical flags.")
+    parser.add_argument("--coordinate-reference", default=None, help="Rama's audited field_geography.csv with field_id, split, lat, lon (WGS84); strict one-to-one join.")
     parser.add_argument("--latitude-col", default=None, help="Optional source latitude column (WGS84 degrees) for spatial GeoJSON export.")
     parser.add_argument("--longitude-col", default=None, help="Optional source longitude column (WGS84 degrees) for spatial GeoJSON export.")
-    parser.add_argument("--scene-qa", default=None, help="Per-date scene-quality table (Rama's date_scene_QA.csv). Flags on suspected-artefact dates are moved out of the crop-review queue (raw flags are kept).")
-    parser.add_argument("--field-coords", default=None, help="Audited per-field WGS84 coordinate table (field_id, lon/lat), joined by field ID for the GeoJSON export.")
     return parser
 
 
@@ -1310,8 +1238,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"Selected forecast baseline: {result['manifest']['selected_forecaster_from_validation']}")
     print(f"Training-calibrated anomaly threshold: {result['manifest']['anomaly_calibration']['lower_anomaly_threshold']:.5f}")
     print(f"Held-out test anomaly flags: {result['alert_count_test']}")
-    sq = result["audit"]["scene_quality_screen"]
-    print(f"Raw flags: {sq['raw_flags']} | quality-screened: {sq['quality_screened_flags']} | suspected scene artefacts: {sq['suspected_scene_artefact_flags']}")
+    print(f"Scene QA held flags (all splits): {result['scene_qa_audit']['held_raw_alerts']}")
     print("Interpretation: anomaly screening only; dust/drought cause remains undetermined.")
     return 0
 

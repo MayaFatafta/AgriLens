@@ -1,0 +1,66 @@
+{
+  "release": "AgriLens GitHub-ready integrated final v1.2.0",
+  "status": "Software integration verified; agronomic damage diagnosis NOT validated",
+  "upstream_source_integrity": {
+    "full_team_manifest_verified_files": 112,
+    "full_team_mismatches": [],
+    "validation_manifest_verified_files": 24,
+    "validation_mismatches": []
+  },
+  "real_data": {
+    "input_sha256": "5919ffbdc2b33b6f3b3fd9c31f534889d80b2aa80cce4ceed1f04192a21c30c6",
+    "rows": 615,
+    "unique_fields": 20,
+    "field_dates": 33,
+    "geographic_splits": {
+      "train": 9,
+      "validation": 6,
+      "test": 5
+    },
+    "split_column": "field_split",
+    "scored_pairs": 595
+  },
+  "rand_corrected_model": {
+    "version": "1.2.0",
+    "raw_flags": 16,
+    "suspected_scene_hold_flags": 5,
+    "quality_screened_review_candidates": 11,
+    "mapped_raw_points": 16,
+    "mapped_screened_points": 11,
+    "selected_model": "ridge",
+    "heldout_test_pairs": 152,
+    "test_persistence_mae": 0.029575,
+    "test_ridge_mae": 0.031036,
+    "lower_residual_threshold": -0.09186982628275275,
+    "optional_lagged_soil_moisture_included": true
+  },
+  "rama_validation": {
+    "raw_flags": 36,
+    "scene_suspect_flags": 13,
+    "non_scene_candidates": 23,
+    "positive_candidates": 14,
+    "negative_candidates": 9
+  },
+  "synthetic_regression_tests": {
+    "passed": 13,
+    "failed": 0,
+    "note": "Run locally with python -m pytest -q tests/test_ndvi_anomaly_detection.py"
+  },
+  "browser_smoke": {
+    "widths_tested_px": [
+      1365,
+      390
+    ],
+    "js_exceptions": 0,
+    "field_options": 20,
+    "default_review_rows": 23,
+    "note": "Chromium headless DOM checks; not exhaustive accessibility testing"
+  },
+  "caveats": [
+    "Zero independently verified dust/drought crop-damage labels",
+    "Scene quality overlay is retrospective and not a prospective operational detector",
+    "Emitted geographic alerts are audited field centroids, not polygons",
+    "Original source raw oversized NetCDF files excluded",
+    "Source manifest checks cover packaged base/validation assets; rerunning model overwrites derived output checksums"
+  ]
+}

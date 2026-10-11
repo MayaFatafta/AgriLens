@@ -1,0 +1,4 @@
+field_split,eligible_fields,usable_emit_fields,mean_coverage,retention_fraction
+test,5,5,1.0,1.0
+train,9,3,0.16535947712418297,0.3333333333333333
+validation,6,6,0.9551282051282052,1.0

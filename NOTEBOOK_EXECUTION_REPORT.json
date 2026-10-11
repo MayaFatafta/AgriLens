@@ -1,0 +1,36 @@
+{
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "execution_method": "separate Python process and fresh in-process IPython kernel for each notebook",
+  "normal_jupyter_transport": "blocked by environment socket policy; not verified",
+  "model_regression_tests": {
+    "passed": 13
+  },
+  "notebooks": [
+    {
+      "path": "AgriLens_PoC.ipynb",
+      "status": "passed_in_process",
+      "code_cells": 7,
+      "outputs_saved": true
+    },
+    {
+      "path": "09_Notebooks/AgriLens_Egypt_HSI_Results.ipynb",
+      "status": "passed_in_process",
+      "code_cells": 5,
+      "outputs_saved": true
+    },
+    {
+      "path": "09_Notebooks/AgriLens_Research_Audit_and_Baseline.ipynb",
+      "status": "passed_in_process",
+      "code_cells": 4,
+      "outputs_saved": true
+    }
+  ],
+  "clean_environment": {
+    "created_from_scratch": true,
+    "requirements_install": "passed",
+    "pip_check": "passed",
+    "main_notebook": "passed all 7 code cells in a fresh in-process kernel",
+    "os": "Linux",
+    "windows_tested": false
+  }
+}

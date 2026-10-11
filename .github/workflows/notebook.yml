@@ -1,0 +1,15 @@
+name: PoC notebook verification
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.14'
+      - run: python -m pip install -r requirements.txt
+      - run: python -m pip check
+      - run: python -m ipykernel install --user --name agrilens
+      - run: python -m pytest -q tests/test_ndvi_anomaly_detection.py
+      - run: python -m nbconvert --to notebook --execute AgriLens_PoC.ipynb --ExecutePreprocessor.kernel_name=agrilens --ExecutePreprocessor.timeout=180 --output AgriLens_PoC.executed.ipynb
