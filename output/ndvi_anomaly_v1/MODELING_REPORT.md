@@ -1,6 +1,6 @@
 # AgriLens — NDVI Modeling & Anomaly Screening Report
 
-**Generated:** 2026-10-11 15:52 UTC  
+**Generated:** 2026-10-11 16:49 UTC  
 **Script version:** 1.2.0  
 **Input SHA-256:** `5919ffbdc2b33b6f3b3fd9c31f534889d80b2aa80cce4ceed1f04192a21c30c6`
 
@@ -10,7 +10,7 @@ This run compares a persistence forecast (next NDVI equals the previous valid ND
 
 **Selected forecast baseline:** `ridge`  
 **Selected Ridge alpha:** `1.0`  
-**Training-calibrated lower residual threshold:** `-0.09102`  
+**Training-calibrated lower residual threshold:** `-0.09019`  
 **Held-out test anomaly flags:** 3 across 2 field(s).
 
 These are **statistical vegetation-change alerts, not confirmed crop damage or dust/drought diagnoses**. No independent damage labels were supplied for this run.
@@ -41,8 +41,8 @@ Reference data expectations from the project summary are 615 field-date rows, 20
 | split        | model            |   n_pairs |   n_fields |     mae |    rmse |   bias_observed_minus_predicted |
 |:-------------|:-----------------|----------:|-----------:|--------:|--------:|--------------------------------:|
 | train_oof    | Persistence      |       266 |          9 | 0.03379 | 0.04733 |                         0.00018 |
-| train_oof    | Ridge(alpha=1.0) |       266 |          9 | 0.03223 | 0.04230 |                         0.00026 |
-| train_oof    | Selected(ridge)  |       266 |          9 | 0.03223 | 0.04230 |                         0.00026 |
+| train_oof    | Ridge(alpha=1.0) |       266 |          9 | 0.03247 | 0.04276 |                        -0.00045 |
+| train_oof    | Selected(ridge)  |       266 |          9 | 0.03247 | 0.04276 |                        -0.00045 |
 | validation   | Persistence      |       177 |          6 | 0.03100 | 0.04650 |                        -0.00217 |
 | validation   | Ridge(alpha=1.0) |       177 |          6 | 0.03076 | 0.04137 |                        -0.00872 |
 | validation   | Selected(ridge)  |       177 |          6 | 0.03076 | 0.04137 |                        -0.00872 |
@@ -60,7 +60,7 @@ Residual is defined as:
 
 `residual = observed_NDVI - expected_NDVI`
 
-The alert threshold is calibrated only from deterministic training-field group out-of-fold residuals. No random shuffling is used, and validation/test residuals are excluded from threshold calibration. The operational threshold is capped at zero, so a flag always means observed NDVI is lower than expected. Method: **minimum of training OOF residual 5th percentile and median - 2.5 robust sigmas**. Training OOF residual count: 266; training fields: 9; OOF folds: 5; median: 0.00060; robust sigma: 0.03665; 5th percentile: -0.06807. A row is flagged when its residual is below the calibrated lower threshold. The threshold is statistical and is not calibrated to agronomic ground truth.
+The alert threshold is calibrated only from deterministic training-field group out-of-fold residuals. No random shuffling is used, and validation/test residuals are excluded from threshold calibration. The operational threshold is capped at zero, so a flag always means observed NDVI is lower than expected. Method: **minimum of training OOF residual 5th percentile and median - 2.5 robust sigmas**. Training OOF residual count: 266; training fields: 9; OOF folds: 5; median: 0.00103; robust sigma: 0.03649; 5th percentile: -0.07357. A row is flagged when its residual is below the calibrated lower threshold. The threshold is statistical and is not calibrated to agronomic ground truth.
 
 The optional `pattern_screen` distinguishes an isolated/abrupt-looking flag from repeated negative changes. This is a descriptive pattern label, not a physical cause diagnosis.
 
@@ -70,7 +70,7 @@ Flagged test fields: 1664899, 1664931. See `heldout_test_alerts.csv` for the rec
 
 ## Spatial GeoJSON export
 
-The run wrote `/home/claude/w/rel/output/ndvi_anomaly_v1/agrilens_spatial_alerts.geojson` with status `written` and 15 mapped alert feature(s). Coordinates are interpreted strictly as WGS84 decimal-degree latitude/longitude and GeoJSON coordinates are stored in `[longitude, latitude]` order. Rows with absent or invalid coordinates are not mapped, and no coordinates or CRS transformations are fabricated. Coordinate source columns: latitude `map_latitude`, longitude `map_longitude`.
+The run wrote `C:\Users\Lenovo\Downloads\AgriLens_Dust_Drought_v2\output\ndvi_anomaly_v1\agrilens_spatial_alerts.geojson` with status `written` and 16 mapped alert feature(s). Coordinates are interpreted strictly as WGS84 decimal-degree latitude/longitude and GeoJSON coordinates are stored in `[longitude, latitude]` order. Rows with absent or invalid coordinates are not mapped, and no coordinates or CRS transformations are fabricated. Coordinate source columns: latitude `map_latitude`, longitude `map_longitude`.
 
 ## Limitations and scientific guardrails
 
@@ -94,4 +94,4 @@ The run wrote `/home/claude/w/rel/output/ndvi_anomaly_v1/agrilens_spatial_alerts
 - `agrilens_spatial_alerts.geojson` — GeoJSON Point features for flagged rows with valid WGS84 latitude/longitude; empty when source coordinates are not available.
 - `figures/` — calibration and demonstration plots, when plotting dependencies are available.
 
-The source data is read-only; all derived artifacts are written to `/home/claude/w/rel/output/ndvi_anomaly_v1`.
+The source data is read-only; all derived artifacts are written to `C:\Users\Lenovo\Downloads\AgriLens_Dust_Drought_v2\output\ndvi_anomaly_v1`.

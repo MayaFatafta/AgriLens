@@ -2,32 +2,32 @@
   "project": "AgriLens — Dust or Drought?",
   "task": "NDVI forecasting baseline comparison and residual anomaly screening",
   "script_version": "1.2.0",
-  "run_utc": "2026-10-11T15:51:59.225841+00:00",
-  "input_file": "/home/claude/w/rel/validation/data/agrilens_real_field_date_QA_gated_615.csv",
+  "run_utc": "2026-10-11T16:49:14.643702+00:00",
+  "input_file": "C:\\Users\\Lenovo\\Downloads\\AgriLens_Dust_Drought_v2\\validation\\data\\agrilens_real_field_date_QA_gated_615.csv",
   "input_sha256": "5919ffbdc2b33b6f3b3fd9c31f534889d80b2aa80cce4ceed1f04192a21c30c6",
-  "output_directory": "/home/claude/w/rel/output/ndvi_anomaly_v1",
+  "output_directory": "C:\\Users\\Lenovo\\Downloads\\AgriLens_Dust_Drought_v2\\output\\ndvi_anomaly_v1",
   "selected_forecaster_from_validation": "ridge",
   "ridge_alpha_selected_from_validation": 1.0,
   "ridge_alpha_candidates": [
     {
       "alpha": 0.1,
-      "validation_mae": 0.030838516367071977
+      "validation_mae": 0.030838516367071953
     },
     {
       "alpha": 1.0,
-      "validation_mae": 0.030761830778549118
+      "validation_mae": 0.030761830778549104
     },
     {
       "alpha": 10.0,
-      "validation_mae": 0.03082292445274437
+      "validation_mae": 0.030822924452744375
     },
     {
       "alpha": 100.0,
-      "validation_mae": 0.03340158237993203
+      "validation_mae": 0.03340158237993205
     }
   ],
   "validation_persistence_mae": 0.030996198079096045,
-  "validation_selected_ridge_mae": 0.030761830778549118,
+  "validation_selected_ridge_mae": 0.030761830778549104,
   "features_used": [
     "__lag1",
     "__lag2",
@@ -41,12 +41,12 @@
   ],
   "anomaly_calibration": {
     "n_training_oof_residuals": 266,
-    "residual_median": 0.0005963860495978857,
-    "residual_mad": 0.02471704429969232,
-    "robust_sigma": 0.03664548987872383,
-    "residual_q05": -0.06806853281857718,
-    "unconstrained_lower_tail_threshold": -0.0910173386472117,
-    "lower_anomaly_threshold": -0.0910173386472117,
+    "residual_median": 0.001025946553064705,
+    "residual_mad": 0.024610454902691703,
+    "robust_sigma": 0.03648746043873072,
+    "residual_q05": -0.07357391292290429,
+    "unconstrained_lower_tail_threshold": -0.09019270454376209,
+    "lower_anomaly_threshold": -0.09019270454376209,
     "method": "minimum of training OOF residual 5th percentile and median - 2.5 robust sigmas",
     "alerts_require_negative_residual": true,
     "calibration_split": "train",
@@ -54,14 +54,14 @@
     "n_training_fields": 9,
     "n_oof_folds": 5
   },
-  "training_oof_calibration_output": "/home/claude/w/rel/output/ndvi_anomaly_v1/threshold_calibration_residuals.csv",
+  "training_oof_calibration_output": "C:\\Users\\Lenovo\\Downloads\\AgriLens_Dust_Drought_v2\\output\\ndvi_anomaly_v1\\threshold_calibration_residuals.csv",
   "training_oof_fold_method": "deterministic GroupKFold over training fields only; no shuffling",
-  "spatial_alerts_geojson": "/home/claude/w/rel/output/ndvi_anomaly_v1/agrilens_spatial_alerts.geojson",
+  "spatial_alerts_geojson": "C:\\Users\\Lenovo\\Downloads\\AgriLens_Dust_Drought_v2\\output\\ndvi_anomaly_v1\\agrilens_spatial_alerts.geojson",
   "spatial_alert_export": {
-    "output_file": "/home/claude/w/rel/output/ndvi_anomaly_v1/agrilens_spatial_alerts.geojson",
+    "output_file": "C:\\Users\\Lenovo\\Downloads\\AgriLens_Dust_Drought_v2\\output\\ndvi_anomaly_v1\\agrilens_spatial_alerts.geojson",
     "coordinate_reference": "WGS84 longitude/latitude in decimal degrees (GeoJSON RFC 7946)",
-    "alert_rows_available": 15,
-    "feature_count": 15,
+    "alert_rows_available": 16,
+    "feature_count": 16,
     "rows_omitted_missing_or_invalid_coordinates": 0,
     "latitude_column": "map_latitude",
     "longitude_column": "map_longitude",
@@ -90,18 +90,18 @@
       "model": "Ridge(alpha=1.0)",
       "n_pairs": 152,
       "n_fields": 5,
-      "mae": 0.030920987103267766,
+      "mae": 0.03092098710326775,
       "rmse": 0.040217334578830886,
-      "bias_observed_minus_predicted": -0.01127758000020758
+      "bias_observed_minus_predicted": -0.011277580000207578
     },
     {
       "split": "test_holdout",
       "model": "Selected(ridge)",
       "n_pairs": 152,
       "n_fields": 5,
-      "mae": 0.030920987103267766,
+      "mae": 0.03092098710326775,
       "rmse": 0.040217334578830886,
-      "bias_observed_minus_predicted": -0.01127758000020758
+      "bias_observed_minus_predicted": -0.011277580000207578
     }
   ],
   "validation_metrics": [
@@ -119,18 +119,18 @@
       "model": "Ridge(alpha=1.0)",
       "n_pairs": 177,
       "n_fields": 6,
-      "mae": 0.030761830778549118,
-      "rmse": 0.04137431023220534,
-      "bias_observed_minus_predicted": -0.008716937533926395
+      "mae": 0.030761830778549104,
+      "rmse": 0.04137431023220532,
+      "bias_observed_minus_predicted": -0.008716937533926312
     },
     {
       "split": "validation",
       "model": "Selected(ridge)",
       "n_pairs": 177,
       "n_fields": 6,
-      "mae": 0.030761830778549118,
-      "rmse": 0.04137431023220534,
-      "bias_observed_minus_predicted": -0.008716937533926395
+      "mae": 0.030761830778549104,
+      "rmse": 0.04137431023220532,
+      "bias_observed_minus_predicted": -0.008716937533926312
     }
   ],
   "interpretation_guardrail": "No damage labels; these are statistical anomaly alerts, not verified dust/drought diagnoses."

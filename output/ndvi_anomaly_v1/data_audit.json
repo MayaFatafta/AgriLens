@@ -1,5 +1,5 @@
 {
-  "input_file": "/home/claude/w/rel/validation/data/agrilens_real_field_date_QA_gated_615.csv",
+  "input_file": "C:\\Users\\Lenovo\\Downloads\\AgriLens_Dust_Drought_v2\\validation\\data\\agrilens_real_field_date_QA_gated_615.csv",
   "input_sha256": "5919ffbdc2b33b6f3b3fd9c31f534889d80b2aa80cce4ceed1f04192a21c30c6",
   "rows_in_input": 615,
   "unique_fields": 20,
@@ -51,10 +51,10 @@
   "latitude_source_column": null,
   "longitude_source_column": null,
   "spatial_alert_export": {
-    "output_file": "/home/claude/w/rel/output/ndvi_anomaly_v1/agrilens_spatial_alerts.geojson",
+    "output_file": "C:\\Users\\Lenovo\\Downloads\\AgriLens_Dust_Drought_v2\\output\\ndvi_anomaly_v1\\agrilens_spatial_alerts.geojson",
     "coordinate_reference": "WGS84 longitude/latitude in decimal degrees (GeoJSON RFC 7946)",
-    "alert_rows_available": 15,
-    "feature_count": 15,
+    "alert_rows_available": 16,
+    "feature_count": 16,
     "rows_omitted_missing_or_invalid_coordinates": 0,
     "latitude_column": "map_latitude",
     "longitude_column": "map_longitude",
@@ -69,14 +69,14 @@
   },
   "scene_quality_screen": {
     "status": "applied",
-    "file": "/home/claude/w/rel/validation/results/date_scene_QA.csv",
+    "file": "C:\\Users\\Lenovo\\Downloads\\AgriLens_Dust_Drought_v2\\validation\\results\\date_scene_QA.csv",
     "rule": "scene_qa_note contains 'high regional aot' (fallback: AOT>=0.6 and regional drop>=0.05)",
     "suspect_dates": [
       "2025-05-17"
     ],
     "flagged_dates_missing_from_scene_qa": [],
-    "raw_flags": 15,
-    "quality_screened_flags": 10,
+    "raw_flags": 16,
+    "quality_screened_flags": 11,
     "suspected_scene_artefact_flags": 5
   },
   "modelled_field_date_rows": 595,
