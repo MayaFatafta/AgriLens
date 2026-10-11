@@ -164,20 +164,8 @@ The dashboard was checked at desktop and mobile sizes in a Chromium smoke test; 
 
 Known limitations: regional dust/AOD and modeled deep-soil moisture lack field-level causal specificity; irrigated water delivery is unmeasured; only one season and small AOI are available; cloudy acquisitions and uneven EMIT retention constrain inference. Never conflate statistical flags, suspected scene artefacts, actual crop damage, or irrigation recommendations.
 
-## GitHub publishing
-
-The ZIP is ready to extract into a Git repository. **Git must be installed separately on Windows.** Create an empty GitHub repository, check files and licenses, then (from this extracted root):
-
-```powershell
-git init -b main
-git add .
-git status --short
-git commit -m "Publish AgriLens validated research and corrected anomaly module"
-git remote add origin https://github.com/YOUR_USERNAME/AgriLens-Dust-or-Drought.git
-git push -u origin main
 ```
 
-Replace `YOUR_USERNAME` with the real repository owner. Review redistribution rights for datasets before choosing public visibility. Large unprocessed EMIT `.nc` files and incomplete `.part` downloads are **not bundled**; retain originals locally and obtain them from their original NASA sources if needed.
 
 ## Team
 
