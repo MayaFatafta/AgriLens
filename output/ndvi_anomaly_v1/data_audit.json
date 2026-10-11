@@ -1,0 +1,86 @@
+{
+  "input_file": "/home/claude/w/rel/validation/data/agrilens_real_field_date_QA_gated_615.csv",
+  "input_sha256": "5919ffbdc2b33b6f3b3fd9c31f534889d80b2aa80cce4ceed1f04192a21c30c6",
+  "rows_in_input": 615,
+  "unique_fields": 20,
+  "unique_parseable_dates": 33,
+  "rows_with_invalid_ndvi_outside_minus1_to_1": 0,
+  "rows_with_unparseable_date_excluded": 0,
+  "field_date_duplicate_check": "passed; no duplicate field-date keys",
+  "geographic_split_field_counts": {
+    "test": 5,
+    "train": 9,
+    "validation": 6
+  },
+  "geographic_split_row_counts": {
+    "test": 157,
+    "train": 275,
+    "validation": 183
+  },
+  "expected_reference_counts": {
+    "field_date_rows": 615,
+    "audited_fields": 20,
+    "observation_dates": 33
+  },
+  "reference_count_checks": {
+    "rows_match_615": true,
+    "fields_match_20": true,
+    "dates_match_33": true
+  },
+  "ndvi_source_column": "ndvi_mean",
+  "date_source_column": "date",
+  "field_source_column": "field_id",
+  "split_source_column": "field_split",
+  "split_selection": {
+    "selection_rule": "audited column 'field_split' has priority",
+    "candidate_columns": [
+      "historical_split_recorded",
+      "field_split"
+    ],
+    "ignored_columns": {
+      "historical_split_recorded": {
+        "rows_disagreeing_with_selected": 308
+      }
+    },
+    "selected_column": "field_split"
+  },
+  "optional_lagged_context_features": [
+    "__lag1_ndmi",
+    "__lag1_dust"
+  ],
+  "latitude_source_column": null,
+  "longitude_source_column": null,
+  "spatial_alert_export": {
+    "output_file": "/home/claude/w/rel/output/ndvi_anomaly_v1/agrilens_spatial_alerts.geojson",
+    "coordinate_reference": "WGS84 longitude/latitude in decimal degrees (GeoJSON RFC 7946)",
+    "alert_rows_available": 15,
+    "feature_count": 15,
+    "rows_omitted_missing_or_invalid_coordinates": 0,
+    "latitude_column": "map_latitude",
+    "longitude_column": "map_longitude",
+    "status": "written",
+    "field_coordinate_resolution": {
+      "status": "resolved",
+      "source": "field_geography.csv (lat/lon)",
+      "fields_with_valid_coordinates": 20,
+      "fields_unmapped": [],
+      "unmapped_reasons": {}
+    }
+  },
+  "scene_quality_screen": {
+    "status": "applied",
+    "file": "/home/claude/w/rel/validation/results/date_scene_QA.csv",
+    "rule": "scene_qa_note contains 'high regional aot' (fallback: AOT>=0.6 and regional drop>=0.05)",
+    "suspect_dates": [
+      "2025-05-17"
+    ],
+    "flagged_dates_missing_from_scene_qa": [],
+    "raw_flags": 15,
+    "quality_screened_flags": 10,
+    "suspected_scene_artefact_flags": 5
+  },
+  "modelled_field_date_rows": 595,
+  "training_oof_residual_rows": 266,
+  "training_oof_field_count": 9,
+  "source_data_modified": false
+}

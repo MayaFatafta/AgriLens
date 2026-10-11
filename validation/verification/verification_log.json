@@ -1,0 +1,122 @@
+[
+ {
+  "check": "source sha256 equals team manifest",
+  "passed": true,
+  "detail": ""
+ },
+ {
+  "check": "source copy in package is byte-identical",
+  "passed": true,
+  "detail": ""
+ },
+ {
+  "check": "615 rows, 20 fields, 33 dates",
+  "passed": true,
+  "detail": ""
+ },
+ {
+  "check": "no duplicate field-date",
+  "passed": true,
+  "detail": ""
+ },
+ {
+  "check": "split 9/6/5 fields",
+  "passed": true,
+  "detail": ""
+ },
+ {
+  "check": "no field in two splits",
+  "passed": true,
+  "detail": ""
+ },
+ {
+  "check": "excluded buffer fields absent",
+  "passed": true,
+  "detail": ""
+ },
+ {
+  "check": "no missing lon/lat/ndvi",
+  "passed": true,
+  "detail": ""
+ },
+ {
+  "check": "lon/lat inside AOI bounds",
+  "passed": true,
+  "detail": "lon 30.2348-30.2651 lat 30.6166-30.6240"
+ },
+ {
+  "check": "every flag has non-trivial category",
+  "passed": true,
+  "detail": ""
+ },
+ {
+  "check": "flag count matches metrics",
+  "passed": true,
+  "detail": ""
+ },
+ {
+  "check": "all AOT>=0.5 flags are artefact-suspect",
+  "passed": true,
+  "detail": ""
+ },
+ {
+  "check": "flags use |residual| > threshold, none missed",
+  "passed": true,
+  "detail": ""
+ },
+ {
+  "check": "queue == flagged rows",
+  "passed": true,
+  "detail": ""
+ },
+ {
+  "check": "geojson features == flags",
+  "passed": true,
+  "detail": ""
+ },
+ {
+  "check": "geojson coordinates [lon,lat] valid",
+  "passed": true,
+  "detail": ""
+ },
+ {
+  "check": "threshold independently recomputed",
+  "passed": true,
+  "detail": "0.11034"
+ },
+ {
+  "check": "test persistence MAE reproduces team 0.02752",
+  "passed": true,
+  "detail": "0.02752"
+ },
+ {
+  "check": "test Ridge MAE reproduces team 0.03555",
+  "passed": true,
+  "detail": "0.03555"
+ },
+ {
+  "check": "CI brackets point estimate",
+  "passed": true,
+  "detail": ""
+ },
+ {
+  "check": "33 scene-QA dates; only 17 May has AOT>=0.5",
+  "passed": true,
+  "detail": ""
+ },
+ {
+  "check": "field centroids agree with FTW polygons (<250 m from bbox centre)",
+  "passed": true,
+  "detail": "20 fields, max 109 m"
+ },
+ {
+  "check": "required files present",
+  "passed": true,
+  "detail": ""
+ },
+ {
+  "check": "report has no unfilled placeholders",
+  "passed": true,
+  "detail": ""
+ }
+]

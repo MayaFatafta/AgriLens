@@ -1,8 +1,0 @@
-{
-  "egypt_hsi_s2_usable_fields.csv": "265dba8580d11207d623a597283bca155e8fe829b5a0f6166b7b38b96ce543d7",
-  "egypt_hsi_complete_spectra.csv": "df30ae03bfc81fe72a0a0a0b223a574926c1881c8b5f29ba06f9f428393f5084",
-  "spectral_wavelength_coverage.csv": "81fbc1ad40b01c5a009542e3cd530fdf6fcbcb667c983fb7d0f09d14cf131806",
-  "egypt_emit_field_spectra.csv": "41bb4caabd3c57ae831703bd29cc47565e152c9b96ce72c07d1cf2fdb226aee1",
-  "egypt_emit_s2_field_alignment.csv": "cb29e3df193784ca206f22cfec52859f3cf6d9af8865b9f0e9c1e9439520ad61",
-  "egypt_emit_s2_alignment_report.json": "f60677dd26219e629b37cda1ba284d08cc1ce58d77cf44208074f911c04e2da7"
-}

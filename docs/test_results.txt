@@ -1,0 +1,36 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.6.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/claude/w/rel
+collecting ... collected 28 items
+
+tests/test_dashboard_alert_classes.py::test_review_candidates_split_into_14_positive_and_9_negative PASSED [  3%]
+tests/test_dashboard_alert_classes.py::test_scene_artefacts_are_their_own_category_on_17_may_only PASSED [  7%]
+tests/test_dashboard_alert_classes.py::test_dashboard_matches_validated_results_table PASSED [ 10%]
+tests/test_dashboard_alert_classes.py::test_forecast_detector_flags_are_a_separate_layer PASSED [ 14%]
+tests/test_dashboard_alert_classes.py::test_visible_text_states_the_separated_counts_and_no_causal_claims PASSED [ 17%]
+tests/test_ndvi_anomaly_detection.py::test_end_to_end_outputs_and_geographic_splits PASSED [ 21%]
+tests/test_ndvi_anomaly_detection.py::test_threshold_calibration_uses_training_only_oof_residuals PASSED [ 25%]
+tests/test_ndvi_anomaly_detection.py::test_strict_9_6_5_geographic_layout_is_enforced PASSED [ 28%]
+tests/test_ndvi_anomaly_detection.py::test_duplicate_field_date_is_rejected PASSED [ 32%]
+tests/test_ndvi_anomaly_detection.py::test_missing_existing_geographic_split_is_rejected PASSED [ 35%]
+tests/test_ndvi_anomaly_detection.py::test_test_field_future_target_does_not_change_earlier_forecasts PASSED [ 39%]
+tests/test_ndvi_anomaly_detection.py::test_geojson_is_valid_empty_collection_when_coordinates_absent PASSED [ 42%]
+tests/test_ndvi_anomaly_detection.py::test_audited_field_split_has_priority_over_historical_column PASSED [ 46%]
+tests/test_ndvi_anomaly_detection.py::test_ambiguous_split_columns_fail_with_clear_error PASSED [ 50%]
+tests/test_ndvi_anomaly_detection.py::test_explicit_historical_column_cannot_pass_the_9_6_5_check PASSED [ 53%]
+tests/test_ndvi_anomaly_detection.py::test_invalid_audited_split_labels_do_not_fall_back_to_other_column PASSED [ 57%]
+tests/test_ndvi_anomaly_detection.py::test_scene_quality_screen_keeps_raw_flags_and_separates_artefacts PASSED [ 60%]
+tests/test_ndvi_anomaly_detection.py::test_scene_qa_without_suspect_dates_changes_nothing PASSED [ 64%]
+tests/test_ndvi_anomaly_detection.py::test_geojson_uses_audited_field_coordinates_joined_by_field_id PASSED [ 67%]
+tests/test_ndvi_anomaly_detection.py::test_invalid_coordinates_stay_unmapped[30.2-95.0-unmapped_not_valid_wgs84_range] PASSED [ 71%]
+tests/test_ndvi_anomaly_detection.py::test_invalid_coordinates_stay_unmapped[234935.9-3391197.4-unmapped_not_valid_wgs84_range] PASSED [ 75%]
+tests/test_ndvi_anomaly_detection.py::test_invalid_coordinates_stay_unmapped[0.0-0.0-unmapped_null_island_placeholder] PASSED [ 78%]
+tests/test_ndvi_anomaly_detection.py::test_invalid_coordinates_stay_unmapped[nan-nan-unmapped_missing_coordinates] PASSED [ 82%]
+tests/test_ndvi_anomaly_detection.py::test_conflicting_duplicate_coordinates_stay_unmapped PASSED [ 85%]
+tests/test_real_615_pipeline.py::test_source_file_is_the_audited_615_table PASSED [ 89%]
+tests/test_real_615_pipeline.py::test_audited_split_and_counts PASSED    [ 92%]
+tests/test_real_615_pipeline.py::test_raw_and_quality_screened_flags PASSED [ 96%]
+tests/test_real_615_pipeline.py::test_geojson_has_verified_wgs84_points_for_all_raw_flags PASSED [100%]
+
+============================= 28 passed in 20.63s ==============================

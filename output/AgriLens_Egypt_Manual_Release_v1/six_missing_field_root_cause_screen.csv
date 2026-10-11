@@ -1,7 +1,0 @@
-field_id,field_split,pixel_centers_in_aoi,export_quality_pass,processed_indices_pass,both_checks_pass,quality_nonfinite,quality_0_or_lower,qa_pass_fraction,both_pass_fraction,diagnosis
-1487525,train,6,0,0,0,0,6,0.0,0.0,all_centers_fail_quality_and_index_checks
-1664797,train,11,0,0,0,0,11,0.0,0.0,all_centers_fail_quality_and_index_checks
-1664849,train,9,0,0,0,0,9,0.0,0.0,all_centers_fail_quality_and_index_checks
-1664852,train,4,0,0,0,0,4,0.0,0.0,all_centers_fail_quality_and_index_checks
-1664853,train,62,0,0,0,0,62,0.0,0.0,all_centers_fail_quality_and_index_checks
-1664855,train,3,0,0,0,0,3,0.0,0.0,all_centers_fail_quality_and_index_checks

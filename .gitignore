@@ -1,11 +1,24 @@
+# Local Python environments and caches
 .venv/
 .venv_clean/
+venv/
 __pycache__/
+*.py[cod]
 .pytest_cache/
 .ipynb_checkpoints/
+
+# Secrets and machine-specific configuration
 .env
 .env.*
 *.pem
 *.key
+
+# Local raw satellite downloads / incomplete downloads
 *.part
 data/emit_egypt/original/*.nc
+
+# Temporary editor and OS files
+*.log
+*.tmp
+.DS_Store
+Thumbs.db

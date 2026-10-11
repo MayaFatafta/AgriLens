@@ -1,0 +1,4 @@
+split,fields,mean_lon,mean_lat,mean_area_ha,rows_with_baseline,flags_total,flags_review,flags_artifact,review_flag_rate,emit_usable,emit_mean_coverage
+test,5,30.26059,30.61821,6.65109,152,7,4,3,0.02632,5,1.00000
+train,9,30.23806,30.61996,5.95550,266,16,10,6,0.03759,3,0.16536
+validation,6,30.25017,30.61835,6.39285,177,13,9,4,0.05085,6,0.95513

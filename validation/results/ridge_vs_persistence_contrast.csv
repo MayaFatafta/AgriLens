@@ -1,0 +1,3 @@
+split,contrast,point,CI95_low,CI95_high,fraction_boot_ridge_better
+validation,ridge minus persistence (MAE),-0.00869,-0.01245,-0.00433,1.00000
+test,ridge minus persistence (MAE),0.00803,-0.00318,0.01686,0.05920

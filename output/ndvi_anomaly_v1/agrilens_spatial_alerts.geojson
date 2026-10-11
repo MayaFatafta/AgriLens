@@ -1,0 +1,545 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "1664803::2025-06-24T00:00:00",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          30.24121,
+          30.61797
+        ]
+      },
+      "properties": {
+        "model_field_id": "1664803",
+        "model_observation_date": "2025-06-24T00:00:00",
+        "model_split": "train",
+        "observed_ndvi": 0.37262255,
+        "expected_ndvi": 0.47038593119561456,
+        "residual_observed_minus_expected": -0.09776338119561456,
+        "anomaly_threshold": -0.0910173386472117,
+        "residual_robust_z": -2.684089299139635,
+        "alert_priority": "Review",
+        "pattern_screen": "Repeated negative changes — review trend",
+        "cause_interpretation": "Undetermined; requires independent field verification",
+        "alert_reason": "Observed NDVI is -0.098 below its expected value (residual -0.098; threshold -0.091).",
+        "inspection_recommendation": "Review crop condition and image quality; verify irrigation records and root-zone moisture before changing water delivery.",
+        "confidence_note": "No long-gap warning from this rule",
+        "selected_model": "ridge",
+        "days_since_previous_observation": "days_since_previous_observation    8.0\ndays_since_previous_observation    8.0\nName: 103, dtype: object",
+        "review_category": "Negative NDVI anomaly - review candidate",
+        "scene_artifact_suspect": false,
+        "quality_screened_flag": true,
+        "scene_qa_status": "no_scene_warning",
+        "latitude": 30.61797,
+        "longitude": 30.24121,
+        "coordinate_source": "field_geography.csv (lat/lon)"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "1664833::2025-05-17T00:00:00",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          30.25063,
+          30.61704
+        ]
+      },
+      "properties": {
+        "model_field_id": "1664833",
+        "model_observation_date": "2025-05-17T00:00:00",
+        "model_split": "validation",
+        "observed_ndvi": 0.39210975,
+        "expected_ndvi": 0.4903953592182799,
+        "residual_observed_minus_expected": -0.09828560921827995,
+        "anomaly_threshold": -0.0910173386472117,
+        "residual_robust_z": -2.6983401121153565,
+        "alert_priority": "Image review (suspected scene artefact)",
+        "pattern_screen": "Repeated negative changes — review trend",
+        "cause_interpretation": "Undetermined; suspected scene/atmospheric artefact - verify imagery before any crop inspection",
+        "alert_reason": "Observed NDVI is -0.098 below its expected value (residual -0.098; threshold -0.091).",
+        "inspection_recommendation": "Check the satellite image first (high regional aerosol load on this date); not a crop-inspection alert unless the dip persists in a clean scene.",
+        "confidence_note": "No long-gap warning from this rule",
+        "selected_model": "ridge",
+        "days_since_previous_observation": "days_since_previous_observation    12.0\ndays_since_previous_observation    12.0\nName: 126, dtype: object",
+        "review_category": "Suspected scene artefact - image review",
+        "scene_artifact_suspect": true,
+        "quality_screened_flag": false,
+        "scene_qa_status": "suspected_scene_artefact",
+        "latitude": 30.61704,
+        "longitude": 30.25063,
+        "coordinate_source": "field_geography.csv (lat/lon)"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "1664841::2025-05-25T00:00:00",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          30.25292,
+          30.61696
+        ]
+      },
+      "properties": {
+        "model_field_id": "1664841",
+        "model_observation_date": "2025-05-25T00:00:00",
+        "model_split": "validation",
+        "observed_ndvi": 0.24694604,
+        "expected_ndvi": 0.34885223716946684,
+        "residual_observed_minus_expected": -0.10190619716946683,
+        "anomaly_threshold": -0.0910173386472117,
+        "residual_robust_z": -2.7971404819062644,
+        "alert_priority": "Review",
+        "pattern_screen": "Repeated negative changes — review trend",
+        "cause_interpretation": "Undetermined; requires independent field verification",
+        "alert_reason": "Observed NDVI is -0.102 below its expected value (residual -0.102; threshold -0.091).",
+        "inspection_recommendation": "Review crop condition and image quality; verify irrigation records and root-zone moisture before changing water delivery.",
+        "confidence_note": "No long-gap warning from this rule",
+        "selected_model": "ridge",
+        "days_since_previous_observation": "days_since_previous_observation    5.0\ndays_since_previous_observation    5.0\nName: 158, dtype: object",
+        "review_category": "Negative NDVI anomaly - review candidate",
+        "scene_artifact_suspect": false,
+        "quality_screened_flag": true,
+        "scene_qa_status": "no_scene_warning",
+        "latitude": 30.61696,
+        "longitude": 30.25292,
+        "coordinate_source": "field_geography.csv (lat/lon)"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "1664841::2025-06-16T00:00:00",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          30.25292,
+          30.61696
+        ]
+      },
+      "properties": {
+        "model_field_id": "1664841",
+        "model_observation_date": "2025-06-16T00:00:00",
+        "model_split": "validation",
+        "observed_ndvi": 0.20045614,
+        "expected_ndvi": 0.2984538591885206,
+        "residual_observed_minus_expected": -0.09799771918852057,
+        "anomaly_threshold": -0.0910173386472117,
+        "residual_robust_z": -2.69048402857787,
+        "alert_priority": "Review",
+        "pattern_screen": "Abrupt/isolated anomaly — review",
+        "cause_interpretation": "Undetermined; requires independent field verification",
+        "alert_reason": "Observed NDVI is -0.098 below its expected value (residual -0.098; threshold -0.091).",
+        "inspection_recommendation": "Review crop condition and image quality; verify irrigation records and root-zone moisture before changing water delivery.",
+        "confidence_note": "No long-gap warning from this rule",
+        "selected_model": "ridge",
+        "days_since_previous_observation": "days_since_previous_observation    7.0\ndays_since_previous_observation    7.0\nName: 162, dtype: object",
+        "review_category": "Negative NDVI anomaly - review candidate",
+        "scene_artifact_suspect": false,
+        "quality_screened_flag": true,
+        "scene_qa_status": "no_scene_warning",
+        "latitude": 30.61696,
+        "longitude": 30.25292,
+        "coordinate_source": "field_geography.csv (lat/lon)"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "1664841::2025-06-24T00:00:00",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          30.25292,
+          30.61696
+        ]
+      },
+      "properties": {
+        "model_field_id": "1664841",
+        "model_observation_date": "2025-06-24T00:00:00",
+        "model_split": "validation",
+        "observed_ndvi": 0.14185259,
+        "expected_ndvi": 0.26287180509990293,
+        "residual_observed_minus_expected": -0.12101921509990293,
+        "anomaly_threshold": -0.0910173386472117,
+        "residual_robust_z": -3.318705836706802,
+        "alert_priority": "Review",
+        "pattern_screen": "Repeated negative changes — review trend",
+        "cause_interpretation": "Undetermined; requires independent field verification",
+        "alert_reason": "Observed NDVI is -0.121 below its expected value (residual -0.121; threshold -0.091).",
+        "inspection_recommendation": "Review crop condition and image quality; verify irrigation records and root-zone moisture before changing water delivery.",
+        "confidence_note": "No long-gap warning from this rule",
+        "selected_model": "ridge",
+        "days_since_previous_observation": "days_since_previous_observation    8.0\ndays_since_previous_observation    8.0\nName: 163, dtype: object",
+        "review_category": "Negative NDVI anomaly - review candidate",
+        "scene_artifact_suspect": false,
+        "quality_screened_flag": true,
+        "scene_qa_status": "no_scene_warning",
+        "latitude": 30.61696,
+        "longitude": 30.25292,
+        "coordinate_source": "field_geography.csv (lat/lon)"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "1664841::2025-09-02T00:00:00",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          30.25292,
+          30.61696
+        ]
+      },
+      "properties": {
+        "model_field_id": "1664841",
+        "model_observation_date": "2025-09-02T00:00:00",
+        "model_split": "validation",
+        "observed_ndvi": 0.48312938,
+        "expected_ndvi": 0.608355408920263,
+        "residual_observed_minus_expected": -0.12522602892026297,
+        "anomaly_threshold": -0.0910173386472117,
+        "residual_robust_z": -3.433503423921006,
+        "alert_priority": "Review",
+        "pattern_screen": "Repeated negative changes — review trend",
+        "cause_interpretation": "Undetermined; requires independent field verification",
+        "alert_reason": "Observed NDVI is -0.125 below its expected value (residual -0.125; threshold -0.091).",
+        "inspection_recommendation": "Review crop condition and image quality; verify irrigation records and root-zone moisture before changing water delivery.",
+        "confidence_note": "No long-gap warning from this rule",
+        "selected_model": "ridge",
+        "days_since_previous_observation": "days_since_previous_observation    5.0\ndays_since_previous_observation    5.0\nName: 175, dtype: object",
+        "review_category": "Negative NDVI anomaly - review candidate",
+        "scene_artifact_suspect": false,
+        "quality_screened_flag": true,
+        "scene_qa_status": "no_scene_warning",
+        "latitude": 30.61696,
+        "longitude": 30.25292,
+        "coordinate_source": "field_geography.csv (lat/lon)"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "1664850::2025-05-17T00:00:00",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          30.23838,
+          30.61887
+        ]
+      },
+      "properties": {
+        "model_field_id": "1664850",
+        "model_observation_date": "2025-05-17T00:00:00",
+        "model_split": "train",
+        "observed_ndvi": 0.42306736,
+        "expected_ndvi": 0.5262517686314017,
+        "residual_observed_minus_expected": -0.10318440863140166,
+        "anomaly_threshold": -0.0910173386472117,
+        "residual_robust_z": -2.8320209396696887,
+        "alert_priority": "Image review (suspected scene artefact)",
+        "pattern_screen": "Repeated negative changes — review trend",
+        "cause_interpretation": "Undetermined; suspected scene/atmospheric artefact - verify imagery before any crop inspection",
+        "alert_reason": "Observed NDVI is -0.103 below its expected value (residual -0.103; threshold -0.091).",
+        "inspection_recommendation": "Check the satellite image first (high regional aerosol load on this date); not a crop-inspection alert unless the dip persists in a clean scene.",
+        "confidence_note": "No long-gap warning from this rule",
+        "selected_model": "ridge",
+        "days_since_previous_observation": "days_since_previous_observation    12.0\ndays_since_previous_observation    12.0\nName: 246, dtype: object",
+        "review_category": "Suspected scene artefact - image review",
+        "scene_artifact_suspect": true,
+        "quality_screened_flag": false,
+        "scene_qa_status": "suspected_scene_artefact",
+        "latitude": 30.61887,
+        "longitude": 30.23838,
+        "coordinate_source": "field_geography.csv (lat/lon)"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "1664852::2025-05-17T00:00:00",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          30.23948,
+          30.6205
+        ]
+      },
+      "properties": {
+        "model_field_id": "1664852",
+        "model_observation_date": "2025-05-17T00:00:00",
+        "model_split": "train",
+        "observed_ndvi": 0.4191887,
+        "expected_ndvi": 0.5150247365544591,
+        "residual_observed_minus_expected": -0.0958360365544591,
+        "anomaly_threshold": -0.0910173386472117,
+        "residual_robust_z": -2.6314949785961277,
+        "alert_priority": "Image review (suspected scene artefact)",
+        "pattern_screen": "Repeated negative changes — review trend",
+        "cause_interpretation": "Undetermined; suspected scene/atmospheric artefact - verify imagery before any crop inspection",
+        "alert_reason": "Observed NDVI is -0.096 below its expected value (residual -0.096; threshold -0.091).",
+        "inspection_recommendation": "Check the satellite image first (high regional aerosol load on this date); not a crop-inspection alert unless the dip persists in a clean scene.",
+        "confidence_note": "No long-gap warning from this rule",
+        "selected_model": "ridge",
+        "days_since_previous_observation": "days_since_previous_observation    12.0\ndays_since_previous_observation    12.0\nName: 275, dtype: object",
+        "review_category": "Suspected scene artefact - image review",
+        "scene_artifact_suspect": true,
+        "quality_screened_flag": false,
+        "scene_qa_status": "suspected_scene_artefact",
+        "latitude": 30.6205,
+        "longitude": 30.23948,
+        "coordinate_source": "field_geography.csv (lat/lon)"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "1664852::2025-06-29T00:00:00",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          30.23948,
+          30.6205
+        ]
+      },
+      "properties": {
+        "model_field_id": "1664852",
+        "model_observation_date": "2025-06-29T00:00:00",
+        "model_split": "train",
+        "observed_ndvi": 0.2561858,
+        "expected_ndvi": 0.3672246609247495,
+        "residual_observed_minus_expected": -0.11103886092474946,
+        "anomaly_threshold": -0.0910173386472117,
+        "residual_robust_z": -3.0463570645063784,
+        "alert_priority": "Review",
+        "pattern_screen": "Repeated negative changes — review trend",
+        "cause_interpretation": "Undetermined; requires independent field verification",
+        "alert_reason": "Observed NDVI is -0.111 below its expected value (residual -0.111; threshold -0.091).",
+        "inspection_recommendation": "Review crop condition and image quality; verify irrigation records and root-zone moisture before changing water delivery.",
+        "confidence_note": "No long-gap warning from this rule",
+        "selected_model": "ridge",
+        "days_since_previous_observation": "days_since_previous_observation    5.0\ndays_since_previous_observation    5.0\nName: 283, dtype: object",
+        "review_category": "Negative NDVI anomaly - review candidate",
+        "scene_artifact_suspect": false,
+        "quality_screened_flag": true,
+        "scene_qa_status": "no_scene_warning",
+        "latitude": 30.6205,
+        "longitude": 30.23948,
+        "coordinate_source": "field_geography.csv (lat/lon)"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "1664855::2025-08-28T00:00:00",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          30.24136,
+          30.61985
+        ]
+      },
+      "properties": {
+        "model_field_id": "1664855",
+        "model_observation_date": "2025-08-28T00:00:00",
+        "model_split": "train",
+        "observed_ndvi": 0.37479845,
+        "expected_ndvi": 0.4890312032221362,
+        "residual_observed_minus_expected": -0.11423275322213622,
+        "anomaly_threshold": -0.0910173386472117,
+        "residual_robust_z": -3.133513555194776,
+        "alert_priority": "Review",
+        "pattern_screen": "Repeated negative changes — review trend",
+        "cause_interpretation": "Undetermined; requires independent field verification",
+        "alert_reason": "Observed NDVI is -0.114 below its expected value (residual -0.114; threshold -0.091).",
+        "inspection_recommendation": "Review crop condition and image quality; verify irrigation records and root-zone moisture before changing water delivery.",
+        "confidence_note": "No long-gap warning from this rule",
+        "selected_model": "ridge",
+        "days_since_previous_observation": "days_since_previous_observation    5.0\ndays_since_previous_observation    5.0\nName: 352, dtype: object",
+        "review_category": "Negative NDVI anomaly - review candidate",
+        "scene_artifact_suspect": false,
+        "quality_screened_flag": true,
+        "scene_qa_status": "no_scene_warning",
+        "latitude": 30.61985,
+        "longitude": 30.24136,
+        "coordinate_source": "field_geography.csv (lat/lon)"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "1664863::2025-09-02T00:00:00",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          30.24538,
+          30.61929
+        ]
+      },
+      "properties": {
+        "model_field_id": "1664863",
+        "model_observation_date": "2025-09-02T00:00:00",
+        "model_split": "validation",
+        "observed_ndvi": 0.5255986,
+        "expected_ndvi": 0.6435817760777376,
+        "residual_observed_minus_expected": -0.11798317607773756,
+        "anomaly_threshold": -0.0910173386472117,
+        "residual_robust_z": -3.2358569231784804,
+        "alert_priority": "Review",
+        "pattern_screen": "Abrupt/isolated anomaly — review",
+        "cause_interpretation": "Undetermined; requires independent field verification",
+        "alert_reason": "Observed NDVI is -0.118 below its expected value (residual -0.118; threshold -0.091).",
+        "inspection_recommendation": "Review crop condition and image quality; verify irrigation records and root-zone moisture before changing water delivery.",
+        "confidence_note": "No long-gap warning from this rule",
+        "selected_model": "ridge",
+        "days_since_previous_observation": "days_since_previous_observation    5.0\ndays_since_previous_observation    5.0\nName: 382, dtype: object",
+        "review_category": "Negative NDVI anomaly - review candidate",
+        "scene_artifact_suspect": false,
+        "quality_screened_flag": true,
+        "scene_qa_status": "no_scene_warning",
+        "latitude": 30.61929,
+        "longitude": 30.24538,
+        "coordinate_source": "field_geography.csv (lat/lon)"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "1664865::2025-09-02T00:00:00",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          30.24801,
+          30.61889
+        ]
+      },
+      "properties": {
+        "model_field_id": "1664865",
+        "model_observation_date": "2025-09-02T00:00:00",
+        "model_split": "validation",
+        "observed_ndvi": 0.51772034,
+        "expected_ndvi": 0.6109157820820146,
+        "residual_observed_minus_expected": -0.09319544208201458,
+        "anomaly_threshold": -0.0910173386472117,
+        "residual_robust_z": -2.559437148800881,
+        "alert_priority": "Review",
+        "pattern_screen": "Abrupt/isolated anomaly — review",
+        "cause_interpretation": "Undetermined; requires independent field verification",
+        "alert_reason": "Observed NDVI is -0.093 below its expected value (residual -0.093; threshold -0.091).",
+        "inspection_recommendation": "Review crop condition and image quality; verify irrigation records and root-zone moisture before changing water delivery.",
+        "confidence_note": "No long-gap warning from this rule",
+        "selected_model": "ridge",
+        "days_since_previous_observation": "days_since_previous_observation    5.0\ndays_since_previous_observation    5.0\nName: 410, dtype: object",
+        "review_category": "Negative NDVI anomaly - review candidate",
+        "scene_artifact_suspect": false,
+        "quality_screened_flag": true,
+        "scene_qa_status": "no_scene_warning",
+        "latitude": 30.61889,
+        "longitude": 30.24801,
+        "coordinate_source": "field_geography.csv (lat/lon)"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "1664899::2025-04-15T00:00:00",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          30.26115,
+          30.61715
+        ]
+      },
+      "properties": {
+        "model_field_id": "1664899",
+        "model_observation_date": "2025-04-15T00:00:00",
+        "model_split": "test",
+        "observed_ndvi": 0.5363625,
+        "expected_ndvi": 0.6469174527169562,
+        "residual_observed_minus_expected": -0.11055495271695626,
+        "anomaly_threshold": -0.0910173386472117,
+        "residual_robust_z": -3.0331519413276555,
+        "alert_priority": "Review",
+        "pattern_screen": "Repeated negative changes — review trend",
+        "cause_interpretation": "Undetermined; requires independent field verification",
+        "alert_reason": "Observed NDVI is -0.111 below its expected value (residual -0.111; threshold -0.091).",
+        "inspection_recommendation": "Review crop condition and image quality; verify irrigation records and root-zone moisture before changing water delivery.",
+        "confidence_note": "No long-gap warning from this rule",
+        "selected_model": "ridge",
+        "days_since_previous_observation": "days_since_previous_observation    10.0\ndays_since_previous_observation    10.0\nName: 505, dtype: object",
+        "review_category": "Negative NDVI anomaly - review candidate",
+        "scene_artifact_suspect": false,
+        "quality_screened_flag": true,
+        "scene_qa_status": "no_scene_warning",
+        "latitude": 30.61715,
+        "longitude": 30.26115,
+        "coordinate_source": "field_geography.csv (lat/lon)"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "1664899::2025-05-17T00:00:00",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          30.26115,
+          30.61715
+        ]
+      },
+      "properties": {
+        "model_field_id": "1664899",
+        "model_observation_date": "2025-05-17T00:00:00",
+        "model_split": "test",
+        "observed_ndvi": 0.34564456,
+        "expected_ndvi": 0.45858553527942253,
+        "residual_observed_minus_expected": -0.11294097527942254,
+        "anomaly_threshold": -0.0910173386472117,
+        "residual_robust_z": -3.0982628886874175,
+        "alert_priority": "Image review (suspected scene artefact)",
+        "pattern_screen": "Repeated negative changes — review trend",
+        "cause_interpretation": "Undetermined; suspected scene/atmospheric artefact - verify imagery before any crop inspection",
+        "alert_reason": "Observed NDVI is -0.113 below its expected value (residual -0.113; threshold -0.091).",
+        "inspection_recommendation": "Check the satellite image first (high regional aerosol load on this date); not a crop-inspection alert unless the dip persists in a clean scene.",
+        "confidence_note": "No long-gap warning from this rule",
+        "selected_model": "ridge",
+        "days_since_previous_observation": "days_since_previous_observation    12.0\ndays_since_previous_observation    12.0\nName: 510, dtype: object",
+        "review_category": "Suspected scene artefact - image review",
+        "scene_artifact_suspect": true,
+        "quality_screened_flag": false,
+        "scene_qa_status": "suspected_scene_artefact",
+        "latitude": 30.61715,
+        "longitude": 30.26115,
+        "coordinate_source": "field_geography.csv (lat/lon)"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "1664931::2025-05-17T00:00:00",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          30.26508,
+          30.61932
+        ]
+      },
+      "properties": {
+        "model_field_id": "1664931",
+        "model_observation_date": "2025-05-17T00:00:00",
+        "model_split": "test",
+        "observed_ndvi": 0.31996855,
+        "expected_ndvi": 0.4209747954726937,
+        "residual_observed_minus_expected": -0.10100624547269366,
+        "anomaly_threshold": -0.0910173386472117,
+        "residual_robust_z": -2.7725821610937573,
+        "alert_priority": "Image review (suspected scene artefact)",
+        "pattern_screen": "Repeated negative changes — review trend",
+        "cause_interpretation": "Undetermined; suspected scene/atmospheric artefact - verify imagery before any crop inspection",
+        "alert_reason": "Observed NDVI is -0.101 below its expected value (residual -0.101; threshold -0.091).",
+        "inspection_recommendation": "Check the satellite image first (high regional aerosol load on this date); not a crop-inspection alert unless the dip persists in a clean scene.",
+        "confidence_note": "No long-gap warning from this rule",
+        "selected_model": "ridge",
+        "days_since_previous_observation": "days_since_previous_observation    12.0\ndays_since_previous_observation    12.0\nName: 541, dtype: object",
+        "review_category": "Suspected scene artefact - image review",
+        "scene_artifact_suspect": true,
+        "quality_screened_flag": false,
+        "scene_qa_status": "suspected_scene_artefact",
+        "latitude": 30.61932,
+        "longitude": 30.26508,
+        "coordinate_source": "field_geography.csv (lat/lon)"
+      }
+    }
+  ]
+}
